@@ -5,11 +5,30 @@ const fs = require('fs');
 const cors = require('cors');
 const { exec } = require('child_process');
 const sharp = require('sharp');
+const session = require('express-session');
 
 const app = express();
 
+// Senha do admin (em produção, use variável de ambiente e hash)
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
+
+// Configurar sessão
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'catalogo-secret-key-change-in-production',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: false, // Em produção com HTTPS, mude para true
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000 // 24 horas
+    }
+}));
+
 // Configurar middleware
-app.use(cors());
+app.use(cors({
+    origin: true,
+    credentials: true
+}));
 app.use(express.json());
 
 // Servir arquivos estáticos com opções para lidar com encoding
@@ -62,8 +81,67 @@ const upload = multer({
     }
 });
 
+// Middleware para verificar se usuário está autenticado
+function requireAdmin(req, res, next) {
+    if (req.session && req.session.isAdmin) {
+        next();
+    } else {
+        res.status(401).json({ error: 'Não autorizado. Faça login como administrador.' });
+    }
+}
+
+// Rota de login
+app.post('/api/login', (req, res) => {
+    try {
+        const { password } = req.body;
+
+        if (!password) {
+            return res.status(400).json({ error: 'Senha é obrigatória' });
+        }
+
+        if (password === ADMIN_PASSWORD) {
+            req.session.isAdmin = true;
+            res.json({
+                success: true,
+                message: 'Login realizado com sucesso!'
+            });
+        } else {
+            res.status(401).json({ error: 'Senha incorreta' });
+        }
+    } catch (error) {
+        console.error('Erro no login:', error);
+        res.status(500).json({ error: 'Erro ao fazer login: ' + error.message });
+    }
+});
+
+// Rota de logout
+app.post('/api/logout', (req, res) => {
+    try {
+        req.session.destroy((err) => {
+            if (err) {
+                console.error('Erro ao fazer logout:', err);
+                return res.status(500).json({ error: 'Erro ao fazer logout' });
+            }
+            res.json({
+                success: true,
+                message: 'Logout realizado com sucesso!'
+            });
+        });
+    } catch (error) {
+        console.error('Erro no logout:', error);
+        res.status(500).json({ error: 'Erro ao fazer logout: ' + error.message });
+    }
+});
+
+// Rota para verificar status de autenticação
+app.get('/api/auth-status', (req, res) => {
+    res.json({
+        isAdmin: req.session && req.session.isAdmin ? true : false
+    });
+});
+
 // Rota para criar categoria/subcategoria
-app.post('/api/create-category', (req, res) => {
+app.post('/api/create-category', requireAdmin, (req, res) => {
     try {
         const { categoryName, subcategoryName } = req.body;
 
@@ -124,7 +202,7 @@ async function generateThumbnail(imagePath) {
 }
 
 // Rota para adicionar produto
-app.post('/api/add-product', upload.single('image'), async (req, res) => {
+app.post('/api/add-product', requireAdmin, upload.single('image'), async (req, res) => {
     try {
         const { category, subcategory, productName } = req.body;
 
@@ -159,7 +237,7 @@ app.post('/api/add-product', upload.single('image'), async (req, res) => {
 });
 
 // Rota para renomear/mover produto
-app.put('/api/rename-product', (req, res) => {
+app.put('/api/rename-product', requireAdmin, (req, res) => {
     try {
         const { imagePath, newName, newCategory, newSubcategory } = req.body;
 
@@ -267,7 +345,7 @@ app.put('/api/rename-product', (req, res) => {
 });
 
 // Rota para deletar produto
-app.delete('/api/delete-product', (req, res) => {
+app.delete('/api/delete-product', requireAdmin, (req, res) => {
     try {
         const { imagePath } = req.body;
 
@@ -328,7 +406,7 @@ app.get('*.(jpg|jpeg|png|gif|webp)', (req, res, next) => {
 });
 
 // Rota para regerar o HTML
-app.post('/api/regenerate-html', (req, res) => {
+app.post('/api/regenerate-html', requireAdmin, (req, res) => {
     try {
         // Executar o script Python para regerar o HTML
         exec(`cd "${__dirname}" && python3 generate_catalog.py`, (error, stdout, stderr) => {

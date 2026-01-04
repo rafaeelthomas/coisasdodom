@@ -103,6 +103,44 @@
             transform: translateY(-2px);
         }
 
+        .btn-auth {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-auth:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .btn-auth.logged-in {
+            background: #e67e22;
+        }
+
+        .btn-auth.logged-in:hover {
+            background: #d35400;
+        }
+
+        /* Ocultar elementos de admin quando não autenticado */
+        .admin-only {
+            display: none !important;
+        }
+
+        body.is-admin .admin-only {
+            display: flex !important;
+        }
+
+        body.is-admin .edit-btn,
+        body.is-admin .delete-btn {
+            display: flex !important;
+        }
+
+        .auth-button-container {
+            padding: 15px 20px;
+            background: #1a252f;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
         .sidebar-nav {
             flex: 1;
             overflow-y: auto;
@@ -973,7 +1011,12 @@
                 <h1>Catálogo de Enxoval</h1>
                 <div class="subtitle">Pertences do Dominic</div>
             </div>
-            <div class="action-buttons">
+            <div class="auth-button-container">
+                <button class="btn btn-auth" id="authButton" onclick="toggleAuth()">
+                    🔒 Login Admin
+                </button>
+            </div>
+            <div class="action-buttons admin-only">
                 <button class="btn btn-primary" onclick="openCategoryModal()">
                     ➕ Categoria
                 </button>
@@ -4991,6 +5034,23 @@
         </div>
     </div>
 
+    <!-- Modal de login -->
+    <div class="modal" id="loginModal" onclick="closeLoginModal()">
+        <div class="modal-form" onclick="event.stopPropagation()" style="max-width: 400px;">
+            <h2 style="color: #e74c3c;">🔒 Login Admin</h2>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="adminPassword">Senha de Administrador *</label>
+                    <input type="password" id="adminPassword" name="adminPassword" required placeholder="Digite a senha">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">🔓 Entrar</button>
+                    <button type="button" class="btn" style="background: #95a5a6; color: white; flex: 0.5;" onclick="closeLoginModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Modal para adicionar categoria -->
     <div class="modal" id="categoryModal" onclick="closeCategoryModal()">
         <div class="modal-form" onclick="event.stopPropagation()">
@@ -5118,6 +5178,124 @@
 
         // Dados de categorias
         const categoriesData = ["Bags- Mochilas", "Berc\u0327o - Lenc\u0327ol - ninho ", "Bermuda", "Body", "Brinquedos", "Calc\u0327ados", "Calc\u0327as", "Camiseta", "Casacos", "Cueiro", "Fraldas", "Higiene-saude", "Jardineira", "Macaca\u0303o", "Manta", "Meias e luvas", "Naninha", "Pano de boca", "Tematico - Mesversario", "Toalha", "Toucas", "Utilitarios"];
+
+        // === AUTENTICAÇÃO ===
+        let isAdmin = false;
+
+        // Verificar status de autenticação ao carregar a página
+        async function checkAuthStatus() {
+            try {
+                const response = await fetch('/api/auth-status', {
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                isAdmin = data.isAdmin;
+                updateUIForAuth();
+            } catch (error) {
+                console.error('Erro ao verificar autenticação:', error);
+                isAdmin = false;
+                updateUIForAuth();
+            }
+        }
+
+        // Atualizar UI baseado no status de autenticação
+        function updateUIForAuth() {
+            const authButton = document.getElementById('authButton');
+
+            if (isAdmin) {
+                document.body.classList.add('is-admin');
+                authButton.textContent = '🔓 Logout';
+                authButton.classList.add('logged-in');
+            } else {
+                document.body.classList.remove('is-admin');
+                authButton.textContent = '🔒 Login Admin';
+                authButton.classList.remove('logged-in');
+            }
+        }
+
+        // Toggle autenticação
+        function toggleAuth() {
+            if (isAdmin) {
+                handleLogout();
+            } else {
+                openLoginModal();
+            }
+        }
+
+        // Abrir modal de login
+        function openLoginModal() {
+            document.getElementById('loginModal').classList.add('active');
+            document.getElementById('adminPassword').focus();
+        }
+
+        // Fechar modal de login
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('active');
+            document.getElementById('loginForm').reset();
+        }
+
+        // Lidar com login
+        async function handleLogin(event) {
+            event.preventDefault();
+
+            const password = document.getElementById('adminPassword').value;
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({ password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    isAdmin = true;
+                    updateUIForAuth();
+                    closeLoginModal();
+                    alert('✅ ' + data.message);
+                } else {
+                    alert('❌ ' + data.error);
+                }
+            } catch (error) {
+                console.error('Erro no login:', error);
+                alert('❌ Erro ao fazer login. Tente novamente.');
+            }
+        }
+
+        // Lidar com logout
+        async function handleLogout() {
+            if (!confirm('Deseja realmente sair do modo administrador?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/logout', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    isAdmin = false;
+                    updateUIForAuth();
+                    alert('✅ ' + data.message);
+                } else {
+                    alert('❌ ' + data.error);
+                }
+            } catch (error) {
+                console.error('Erro no logout:', error);
+                alert('❌ Erro ao fazer logout. Tente novamente.');
+            }
+        }
+
+        // Verificar autenticação ao carregar
+        checkAuthStatus();
+
 
         // Toggle Sidebar Mobile
         function toggleSidebar() {
