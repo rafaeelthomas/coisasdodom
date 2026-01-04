@@ -313,7 +313,7 @@ for category_name in sorted(categories.keys(), key=natural_sort_key):
             full_path = f"{category_name}/{subcat_name}"
 
             content_sections.append(f'''
-            <section class="section" id="{subcat_id}" data-category="{full_path}">
+            <section class="section" id="{subcat_id}" data-category="{category_name}" data-subcategory="{subcat_name}">
                 <div class="section-header">
                     <div class="section-header-info">
                         <h2>{category_name} / {subcat_name}</h2>
