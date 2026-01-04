@@ -130,11 +130,6 @@
             display: flex !important;
         }
 
-        body.is-admin .edit-btn,
-        body.is-admin .delete-btn {
-            display: flex !important;
-        }
-
         .auth-button-container {
             padding: 15px 20px;
             background: #1a252f;
@@ -341,7 +336,7 @@
             border: none;
             border-radius: 50%;
             cursor: pointer;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             font-size: 18px;
@@ -352,7 +347,11 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
 
-        .image-card:hover .delete-btn {
+        body.is-admin .delete-btn {
+            display: flex;
+        }
+
+        body.is-admin .image-card:hover .delete-btn {
             opacity: 1;
         }
 
@@ -376,7 +375,7 @@
             border: none;
             border-radius: 50%;
             cursor: pointer;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             font-size: 16px;
@@ -387,7 +386,11 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
 
-        .image-card:hover .edit-btn {
+        body.is-admin .edit-btn {
+            display: flex;
+        }
+
+        body.is-admin .image-card:hover .edit-btn {
             opacity: 1;
         }
 
@@ -518,6 +521,7 @@
         }
 
         .form-group input[type="text"],
+        .form-group input[type="password"],
         .form-group select {
             width: 100%;
             padding: 12px;
@@ -528,9 +532,39 @@
         }
 
         .form-group input[type="text"]:focus,
+        .form-group input[type="password"]:focus,
         .form-group select:focus {
             outline: none;
             border-color: #3498db;
+        }
+
+        .password-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-input-wrapper input {
+            padding-right: 45px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.3s;
+        }
+
+        .toggle-password:hover {
+            color: #3498db;
         }
 
         .form-group input[type="file"] {
@@ -5045,7 +5079,12 @@
                 </div>
                 <div class="form-group">
                     <label for="adminPassword">Senha *</label>
-                    <input type="password" id="adminPassword" name="adminPassword" required placeholder="Digite sua senha" autocomplete="current-password">
+                    <div class="password-input-wrapper">
+                        <input type="password" id="adminPassword" name="adminPassword" required placeholder="Digite sua senha" autocomplete="current-password">
+                        <button type="button" class="toggle-password" onclick="togglePasswordVisibility()" title="Mostrar/Ocultar senha">
+                            👁️
+                        </button>
+                    </div>
                 </div>
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary" style="flex: 1;">🔓 Entrar</button>
@@ -5236,6 +5275,22 @@
         function closeLoginModal() {
             document.getElementById('loginModal').classList.remove('active');
             document.getElementById('loginForm').reset();
+        }
+
+        // Toggle visibilidade da senha
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('adminPassword');
+            const toggleButton = document.querySelector('.toggle-password');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleButton.textContent = '🙈';
+                toggleButton.title = 'Ocultar senha';
+            } else {
+                passwordInput.type = 'password';
+                toggleButton.textContent = '👁️';
+                toggleButton.title = 'Mostrar senha';
+            }
         }
 
         // Lidar com login
