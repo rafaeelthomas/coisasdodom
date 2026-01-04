@@ -213,8 +213,9 @@ for category_name in sorted(categories.keys(), key=natural_sort_key):
         # Adicionar itens
         for item in items:
             filename = os.path.splitext(item['filename'])[0]
-            img_path = quote(item['path'])
-            thumb_path = quote(item['thumbnail'])
+            # Usar replace para barras, mas não quote() para manter caracteres especiais
+            img_path = item['path'].replace('\\', '/')
+            thumb_path = item['thumbnail'].replace('\\', '/')
 
             content_sections.append(f'''
                     <div class="image-card" onclick="openModal('{img_path}', '{filename}')">
@@ -269,8 +270,8 @@ for category_name in sorted(categories.keys(), key=natural_sort_key):
             # Adicionar itens desta subcategoria
             for item in items:
                 filename = os.path.splitext(item['filename'])[0]
-                img_path = quote(item['path'])
-                thumb_path = quote(item['thumbnail'])
+                img_path = item['path'].replace('\\', '/')
+                thumb_path = item['thumbnail'].replace('\\', '/')
 
                 content_sections.append(f'''
                         <div class="image-card" onclick="openModal('{img_path}', '{filename}')">
@@ -315,8 +316,8 @@ for category_name in sorted(categories.keys(), key=natural_sort_key):
             # Adicionar itens
             for item in items:
                 filename = os.path.splitext(item['filename'])[0]
-                img_path = quote(item['path'])
-                thumb_path = quote(item['thumbnail'])
+                img_path = item['path'].replace('\\', '/')
+                thumb_path = item['thumbnail'].replace('\\', '/')
 
                 content_sections.append(f'''
                     <div class="image-card" onclick="openModal('{img_path}', '{filename}')">
@@ -356,8 +357,8 @@ for category_name in sorted(categories.keys(), key=natural_sort_key):
             # Adicionar itens
             for item in items:
                 filename = os.path.splitext(item['filename'])[0]
-                img_path = quote(item['path'])
-                thumb_path = quote(item['thumbnail'])
+                img_path = item['path'].replace('\\', '/')
+                thumb_path = item['thumbnail'].replace('\\', '/')
 
                 content_sections.append(f'''
                     <div class="image-card" onclick="openModal('{img_path}', '{filename}')">
