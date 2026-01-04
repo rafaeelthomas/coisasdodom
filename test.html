@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Imagens</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .image-card {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background: white;
+        }
+        .image-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+        .image-info {
+            padding: 10px;
+            text-align: center;
+            background: #f8f9fa;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Teste de Carregamento de Imagens</h1>
+
+    <div class="test-section">
+        <h2>Bags- Mochilas (com thumbnails)</h2>
+        <div class="image-grid">
+            <div class="image-card">
+                <img src=".thumbnails/Bags-%20Mochilas/1.jpg" alt="Teste 1"
+                     onerror="this.parentElement.innerHTML='<div style=\'padding:20px;color:red;\'>❌ Thumbnail não carregou</div>'"
+                     onload="this.nextElementSibling.innerHTML='<span class=\'status success\'>✅ Thumbnail OK</span>'">
+                <div class="image-info">Carregando...</div>
+            </div>
+            <div class="image-card">
+                <img src=".thumbnails/Bags-%20Mochilas/2.jpg" alt="Teste 2"
+                     onerror="this.parentElement.innerHTML='<div style=\'padding:20px;color:red;\'>❌ Thumbnail não carregou</div>'"
+                     onload="this.nextElementSibling.innerHTML='<span class=\'status success\'>✅ Thumbnail OK</span>'">
+                <div class="image-info">Carregando...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Body (com thumbnails)</h2>
+        <div class="image-grid">
+            <div class="image-card">
+                <img src=".thumbnails/Body/0-3%20meses/Com%20Manga/1.jpg" alt="Body 1"
+                     onerror="this.parentElement.innerHTML='<div style=\'padding:20px;color:red;\'>❌ Thumbnail não carregou</div>'"
+                     onload="this.nextElementSibling.innerHTML='<span class=\'status success\'>✅ Thumbnail OK</span>'">
+                <div class="image-info">Carregando...</div>
+            </div>
+            <div class="image-card">
+                <img src=".thumbnails/Body/0-3%20meses/Com%20Manga/2.jpg" alt="Body 2"
+                     onerror="this.parentElement.innerHTML='<div style=\'padding:20px;color:red;\'>❌ Thumbnail não carregou</div>'"
+                     onload="this.nextElementSibling.innerHTML='<span class=\'status success\'>✅ Thumbnail OK</span>'">
+                <div class="image-info">Carregando...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Imagens sem thumbnail (fallback para original)</h2>
+        <div class="image-grid">
+            <div class="image-card">
+                <img src="Body/0-3%20meses/Com%20Manga/12.jpg" alt="Original 12"
+                     onerror="this.parentElement.innerHTML='<div style=\'padding:20px;color:red;\'>❌ Imagem original não carregou</div>'"
+                     onload="this.nextElementSibling.innerHTML='<span class=\'status success\'>✅ Original OK</span>'">
+                <div class="image-info">Carregando...</div>
+            </div>
+            <div class="image-card">
+                <img src="Fraldas/4.jpg" alt="Fraldas 4"
+                     onerror="this.parentElement.innerHTML='<div style=\'padding:20px;color:red;\'>❌ Imagem original não carregou</div>'"
+                     onload="this.nextElementSibling.innerHTML='<span class=\'status success\'>✅ Original OK</span>'">
+                <div class="image-info">Carregando...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Informações do Sistema</h2>
+        <p><strong>Total de cards no index.html:</strong> 151</p>
+        <p><strong>Cards com thumbnail:</strong> 133</p>
+        <p><strong>Cards com imagem original:</strong> 18</p>
+        <p><strong>Status do servidor:</strong> <span id="serverStatus">Verificando...</span></p>
+    </div>
+
+    <script>
+        // Verificar se servidor está respondendo
+        fetch('/api/regenerate-html', { method: 'HEAD' })
+            .then(() => {
+                document.getElementById('serverStatus').innerHTML = '<span class="status success">✅ Servidor Online</span>';
+            })
+            .catch(() => {
+                document.getElementById('serverStatus').innerHTML = '<span class="status error">❌ Servidor Offline</span>';
+            });
+    </script>
+</body>
+</html>
