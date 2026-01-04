@@ -403,15 +403,22 @@
             object-fit: contain;
             border-radius: 8px;
             cursor: zoom-in;
-            transition: transform 0.3s ease;
-            transform-origin: center center;
+            transition: transform 0.2s ease;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         .modal-image.zoomed {
-            cursor: zoom-out;
-            transform: scale(2);
+            cursor: grab;
+            transform: scale(2.5);
             max-width: none;
             max-height: none;
+            position: relative;
+        }
+
+        .modal-image.zoomed.dragging {
+            cursor: grabbing;
+            transition: none;
         }
 
         .modal-caption {
@@ -5159,6 +5166,11 @@
         }
 
         // Modal de imagem
+        // Variáveis para controle de pan (arrastar)
+        let isDragging = false;
+        let startX, startY;
+        let scrollLeft, scrollTop;
+
         function openModal(imagePath, caption) {
             const modal = document.getElementById('imageModal');
             const modalImage = document.getElementById('modalImage');
@@ -5170,15 +5182,113 @@
             modal.classList.add('active');
 
             // Remover zoom ao abrir modal
-            modalImage.classList.remove('zoomed');
+            modalImage.classList.remove('zoomed', 'dragging');
             modalContent.classList.remove('zoomed');
+
+            // Remover event listeners antigos
+            modalImage.onclick = null;
+            modalImage.onmousedown = null;
+            modalImage.onmousemove = null;
+            modalImage.onmouseup = null;
+            modalImage.onmouseleave = null;
 
             // Adicionar evento de clique para zoom
             modalImage.onclick = function(e) {
                 e.stopPropagation();
+                const wasZoomed = modalImage.classList.contains('zoomed');
                 modalImage.classList.toggle('zoomed');
                 modalContent.classList.toggle('zoomed');
+
+                if (!wasZoomed) {
+                    // Ativou o zoom - adicionar eventos de pan
+                    setupPanEvents(modalContent, modalImage);
+                } else {
+                    // Desativou o zoom - remover eventos de pan
+                    removePanEvents(modalContent, modalImage);
+                }
             };
+        }
+
+        function setupPanEvents(container, image) {
+            // Mouse down - iniciar arraste
+            image.onmousedown = function(e) {
+                e.preventDefault();
+                isDragging = true;
+                image.classList.add('dragging');
+                startX = e.pageX - container.offsetLeft;
+                startY = e.pageY - container.offsetTop;
+                scrollLeft = container.scrollLeft;
+                scrollTop = container.scrollTop;
+            };
+
+            // Mouse move - arrastar
+            container.onmousemove = function(e) {
+                if (!isDragging) return;
+                e.preventDefault();
+                const x = e.pageX - container.offsetLeft;
+                const y = e.pageY - container.offsetTop;
+                const walkX = (x - startX) * 2;
+                const walkY = (y - startY) * 2;
+                container.scrollLeft = scrollLeft - walkX;
+                container.scrollTop = scrollTop - walkY;
+            };
+
+            // Mouse up - parar arraste
+            const stopDragging = function() {
+                isDragging = false;
+                image.classList.remove('dragging');
+            };
+
+            container.onmouseup = stopDragging;
+            container.onmouseleave = stopDragging;
+
+            // Wheel event para scroll com roda do mouse
+            container.onwheel = function(e) {
+                e.preventDefault();
+                // Scroll horizontal com Shift + roda, vertical sem Shift
+                if (e.shiftKey) {
+                    container.scrollLeft += e.deltaY;
+                } else {
+                    container.scrollTop += e.deltaY;
+                }
+            };
+
+            // Touch events para mobile
+            image.ontouchstart = function(e) {
+                const touch = e.touches[0];
+                isDragging = true;
+                startX = touch.pageX - container.offsetLeft;
+                startY = touch.pageY - container.offsetTop;
+                scrollLeft = container.scrollLeft;
+                scrollTop = container.scrollTop;
+            };
+
+            container.ontouchmove = function(e) {
+                if (!isDragging) return;
+                e.preventDefault();
+                const touch = e.touches[0];
+                const x = touch.pageX - container.offsetLeft;
+                const y = touch.pageY - container.offsetTop;
+                const walkX = (x - startX) * 2;
+                const walkY = (y - startY) * 2;
+                container.scrollLeft = scrollLeft - walkX;
+                container.scrollTop = scrollTop - walkY;
+            };
+
+            container.ontouchend = function() {
+                isDragging = false;
+            };
+        }
+
+        function removePanEvents(container, image) {
+            image.onmousedown = null;
+            container.onmousemove = null;
+            container.onmouseup = null;
+            container.onmouseleave = null;
+            container.onwheel = null;
+            image.ontouchstart = null;
+            container.ontouchmove = null;
+            container.ontouchend = null;
         }
 
         function closeImageModal() {
@@ -5187,8 +5297,12 @@
             const modalContent = document.querySelector('#imageModal .modal-content');
 
             modal.classList.remove('active');
-            modalImage.classList.remove('zoomed');
+            modalImage.classList.remove('zoomed', 'dragging');
             modalContent.classList.remove('zoomed');
+
+            // Limpar eventos
+            removePanEvents(modalContent, modalImage);
+            isDragging = false;
         }
 
         // Modal de categoria
