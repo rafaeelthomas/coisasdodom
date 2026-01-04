@@ -5040,8 +5040,12 @@
             <h2 style="color: #e74c3c;">🔒 Login Admin</h2>
             <form id="loginForm" onsubmit="handleLogin(event)">
                 <div class="form-group">
-                    <label for="adminPassword">Senha de Administrador *</label>
-                    <input type="password" id="adminPassword" name="adminPassword" required placeholder="Digite a senha">
+                    <label for="adminUsername">Username *</label>
+                    <input type="text" id="adminUsername" name="adminUsername" required placeholder="Digite seu username" autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="adminPassword">Senha *</label>
+                    <input type="password" id="adminPassword" name="adminPassword" required placeholder="Digite sua senha" autocomplete="current-password">
                 </div>
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary" style="flex: 1;">🔓 Entrar</button>
@@ -5225,7 +5229,7 @@
         // Abrir modal de login
         function openLoginModal() {
             document.getElementById('loginModal').classList.add('active');
-            document.getElementById('adminPassword').focus();
+            document.getElementById('adminUsername').focus();
         }
 
         // Fechar modal de login
@@ -5238,6 +5242,7 @@
         async function handleLogin(event) {
             event.preventDefault();
 
+            const username = document.getElementById('adminUsername').value;
             const password = document.getElementById('adminPassword').value;
 
             try {
@@ -5247,7 +5252,7 @@
                         'Content-Type': 'application/json'
                     },
                     credentials: 'include',
-                    body: JSON.stringify({ password })
+                    body: JSON.stringify({ username, password })
                 });
 
                 const data = await response.json();

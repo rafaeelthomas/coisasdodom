@@ -9,8 +9,17 @@ const session = require('express-session');
 
 const app = express();
 
-// Senha do admin (em produção, use variável de ambiente e hash)
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
+// Lista de administradores (em produção, use variável de ambiente e hash de senhas)
+// Formato: username:password,username2:password2
+const ADMIN_USERS = process.env.ADMIN_USERS
+    ? process.env.ADMIN_USERS.split(',').map(user => {
+        const [username, password] = user.split(':');
+        return { username: username.trim(), password: password.trim() };
+      })
+    : [
+        { username: 'admin', password: 'admin123' },
+        { username: 'rafael', password: 'rafael123' }
+      ];
 
 // Configurar sessão
 app.use(session({
@@ -93,20 +102,25 @@ function requireAdmin(req, res, next) {
 // Rota de login
 app.post('/api/login', (req, res) => {
     try {
-        const { password } = req.body;
+        const { username, password } = req.body;
 
-        if (!password) {
-            return res.status(400).json({ error: 'Senha é obrigatória' });
+        if (!username || !password) {
+            return res.status(400).json({ error: 'Username e senha são obrigatórios' });
         }
 
-        if (password === ADMIN_PASSWORD) {
+        // Buscar usuário na lista
+        const user = ADMIN_USERS.find(u => u.username === username && u.password === password);
+
+        if (user) {
             req.session.isAdmin = true;
+            req.session.username = username;
             res.json({
                 success: true,
-                message: 'Login realizado com sucesso!'
+                message: `Bem-vindo, ${username}!`,
+                username: username
             });
         } else {
-            res.status(401).json({ error: 'Senha incorreta' });
+            res.status(401).json({ error: 'Username ou senha incorretos' });
         }
     } catch (error) {
         console.error('Erro no login:', error);
