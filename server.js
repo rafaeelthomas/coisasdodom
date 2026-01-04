@@ -3,6 +3,8 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
+const { exec } = require('child_process');
+const sharp = require('sharp');
 
 const app = express();
 
@@ -82,8 +84,38 @@ app.post('/api/create-category', (req, res) => {
     }
 });
 
+// Função para gerar thumbnail
+async function generateThumbnail(imagePath) {
+    try {
+        const thumbnailDir = path.join(__dirname, '.thumbnails');
+        const imageRelativePath = imagePath.replace(__dirname + path.sep, '');
+        const thumbnailPath = path.join(thumbnailDir, imageRelativePath);
+        const thumbnailFolder = path.dirname(thumbnailPath);
+
+        // Criar diretório do thumbnail se não existir
+        if (!fs.existsSync(thumbnailFolder)) {
+            fs.mkdirSync(thumbnailFolder, { recursive: true });
+        }
+
+        // Gerar thumbnail com sharp (400x400px)
+        await sharp(imagePath)
+            .resize(400, 400, {
+                fit: 'cover',
+                position: 'center'
+            })
+            .jpeg({ quality: 85 })
+            .toFile(thumbnailPath);
+
+        console.log(`✅ Thumbnail gerado: ${thumbnailPath}`);
+        return true;
+    } catch (error) {
+        console.error('❌ Erro ao gerar thumbnail:', error);
+        return false;
+    }
+}
+
 // Rota para adicionar produto
-app.post('/api/add-product', upload.single('image'), (req, res) => {
+app.post('/api/add-product', upload.single('image'), async (req, res) => {
     try {
         const { category, subcategory, productName } = req.body;
 
@@ -93,10 +125,23 @@ app.post('/api/add-product', upload.single('image'), (req, res) => {
 
         const imagePath = req.file.path.replace(__dirname + path.sep, '');
 
+        // Gerar thumbnail
+        await generateThumbnail(req.file.path);
+
+        // Regenerar HTML automaticamente
+        exec(`cd "${__dirname}" && python3 generate_catalog.py`, (error, stdout, stderr) => {
+            if (error) {
+                console.error('❌ Erro ao regerar HTML:', error);
+            } else {
+                console.log('✅ HTML regenerado automaticamente');
+            }
+        });
+
         res.json({
             success: true,
             message: `Produto "${productName}" adicionado com sucesso!`,
-            imagePath: imagePath.replace(/\\/g, '/')
+            imagePath: imagePath.replace(/\\/g, '/'),
+            needsReload: true
         });
     } catch (error) {
         console.error('Erro ao adicionar produto:', error);
@@ -104,11 +149,56 @@ app.post('/api/add-product', upload.single('image'), (req, res) => {
     }
 });
 
+// Rota para deletar produto
+app.delete('/api/delete-product', (req, res) => {
+    try {
+        const { imagePath } = req.body;
+
+        if (!imagePath) {
+            return res.status(400).json({ error: 'Caminho da imagem é obrigatório' });
+        }
+
+        const fullPath = path.join(__dirname, imagePath);
+        const thumbnailPath = path.join(__dirname, '.thumbnails', imagePath);
+
+        // Verificar se o arquivo existe
+        if (!fs.existsSync(fullPath)) {
+            return res.status(404).json({ error: 'Arquivo não encontrado' });
+        }
+
+        // Deletar a imagem original
+        fs.unlinkSync(fullPath);
+        console.log(`✅ Imagem deletada: ${fullPath}`);
+
+        // Deletar o thumbnail se existir
+        if (fs.existsSync(thumbnailPath)) {
+            fs.unlinkSync(thumbnailPath);
+            console.log(`✅ Thumbnail deletado: ${thumbnailPath}`);
+        }
+
+        // Regenerar HTML automaticamente
+        exec(`cd "${__dirname}" && python3 generate_catalog.py`, (error, stdout, stderr) => {
+            if (error) {
+                console.error('❌ Erro ao regerar HTML:', error);
+            } else {
+                console.log('✅ HTML regenerado após exclusão');
+            }
+        });
+
+        res.json({
+            success: true,
+            message: 'Produto deletado com sucesso!',
+            needsReload: true
+        });
+    } catch (error) {
+        console.error('Erro ao deletar produto:', error);
+        res.status(500).json({ error: 'Erro ao deletar produto: ' + error.message });
+    }
+});
+
 // Rota para regerar o HTML
 app.post('/api/regenerate-html', (req, res) => {
     try {
-        const { exec } = require('child_process');
-
         // Executar o script Python para regerar o HTML
         exec(`cd "${__dirname}" && python3 generate_catalog.py`, (error, stdout, stderr) => {
             if (error) {
@@ -134,6 +224,6 @@ const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`? Servidor rodando na porta ${PORT}`);
-    console.log(`? Diret�rio: ${__dirname}`);
+    console.log(`? Diret�rio: ${__dirname}`);
     console.log(`? Acesse: ${process.env.RENDER_EXTERNAL_URL || 'http://localhost:' + PORT}`);
 });
