@@ -1,0 +1,3087 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Catálogo de Enxoval - Pertences do Dominic">
+    <title>Catálogo de Enxoval - Pertences do Dominic</title>
+    <style>
+        /* === Reset e Base === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                         "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* === Layout Principal === */
+        .app-container {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+        }
+
+        /* === Sidebar === */
+        .sidebar {
+            width: 300px;
+            background: #2c3e50;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 30px 20px 20px;
+            background: #1a252f;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: white;
+        }
+
+        .sidebar-header .subtitle {
+            font-size: 0.85rem;
+            color: #95a5a6;
+            margin-bottom: 15px;
+        }
+
+        /* === Botões de Ação === */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            padding: 0 20px 15px;
+            background: #1a252f;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+
+        .category-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .category-item {
+            margin: 0;
+        }
+
+        .category-link {
+            display: block;
+            padding: 12px 20px;
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: all 0.2s;
+            border-left: 4px solid transparent;
+            font-weight: 500;
+        }
+
+        .category-link:hover {
+            background: rgba(52, 152, 219, 0.2);
+            border-left-color: #3498db;
+        }
+
+        .category-link.active {
+            background: rgba(52, 152, 219, 0.3);
+            border-left-color: #3498db;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* === Subcategorias === */
+        .subcategory-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            background: rgba(0,0,0,0.1);
+        }
+
+        .subcategory-item {
+            margin: 0;
+        }
+
+        .subcategory-link {
+            display: block;
+            padding: 8px 20px 8px 40px;
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .subcategory-link:hover {
+            background: rgba(52, 152, 219, 0.15);
+            color: #ecf0f1;
+        }
+
+        .subcategory-link.active {
+            background: rgba(52, 152, 219, 0.25);
+            color: white;
+            font-weight: 500;
+        }
+
+        /* === Área de Conteúdo === */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 40px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #3498db;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-header-info h2 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .section-header-info .count {
+            font-size: 1rem;
+            color: #7f8c8d;
+        }
+
+        .add-product-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .add-product-btn:hover {
+            background: #229954;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+        }
+
+        /* === Grid de Imagens === */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            padding: 20px 0;
+        }
+
+        .image-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .image-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .image-wrapper {
+            position: relative;
+            padding-top: 100%;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+
+        .image-wrapper img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .image-card:hover .image-wrapper img {
+            transform: scale(1.05);
+        }
+
+        .image-info {
+            padding: 15px;
+        }
+
+        .image-name {
+            font-size: 0.9rem;
+            color: #2c3e50;
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* === Modal Base === */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        /* === Modal de Imagem === */
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .modal-image {
+            max-width: 100%;
+            max-height: calc(90vh - 100px);
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .modal-caption {
+            color: white;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            line-height: 1;
+            transition: transform 0.2s;
+        }
+
+        .modal-close:hover {
+            transform: scale(1.2);
+        }
+
+        /* === Modal de Formulário === */
+        .modal-form {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-form h2 {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .form-group input[type="text"],
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px dashed #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .file-preview {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .file-preview img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .file-info {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .form-actions .btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 1rem;
+        }
+
+        .btn-cancel {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background: #7f8c8d;
+        }
+
+        .btn-submit {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-submit:hover {
+            background: #229954;
+        }
+
+        /* === Mensagens === */
+        .message {
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* === Menu Hamburguer Mobile === */
+        .mobile-header {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: #2c3e50;
+            color: white;
+            align-items: center;
+            padding: 0 15px;
+            z-index: 200;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .hamburger {
+            width: 30px;
+            height: 25px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin-right: 15px;
+        }
+
+        .hamburger span {
+            display: block;
+            height: 3px;
+            background: white;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .mobile-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 150;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        /* === Responsivo Tablet === */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 280px;
+            }
+
+            .main-content {
+                padding: 30px;
+            }
+
+            .image-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 20px;
+            }
+        }
+
+        /* === Responsivo Mobile === */
+        @media (max-width: 768px) {
+            body {
+                overflow: auto;
+            }
+
+            .app-container {
+                flex-direction: column;
+                height: auto;
+                min-height: 100vh;
+            }
+
+            .mobile-header {
+                display: flex;
+            }
+
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 280px;
+                height: 100vh;
+                transition: left 0.3s ease-in-out;
+                z-index: 160;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .sidebar-header {
+                padding: 70px 20px 20px;
+            }
+
+            .main-content {
+                flex: 1;
+                margin-top: 60px;
+                padding: 20px 15px;
+                overflow-y: auto;
+                height: auto;
+            }
+
+            .image-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 12px;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+                padding-bottom: 15px;
+            }
+
+            .section-header-info h2 {
+                font-size: 1.4rem;
+            }
+
+            .section-header-info .count {
+                font-size: 0.9rem;
+            }
+
+            .add-product-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 14px 20px;
+                font-size: 0.95rem;
+            }
+
+            /* Ajustes nos cards */
+            .image-card {
+                border-radius: 8px;
+            }
+
+            .image-info {
+                padding: 10px;
+            }
+
+            .image-name {
+                font-size: 0.85rem;
+            }
+
+            /* Ajustes nos botões da sidebar */
+            .action-buttons {
+                padding: 0 15px 15px;
+                gap: 8px;
+            }
+
+            .action-buttons .btn {
+                padding: 10px 12px;
+                font-size: 0.8rem;
+            }
+
+            /* Ajustes nos modais */
+            .modal {
+                padding: 20px;
+            }
+
+            .modal-form {
+                padding: 25px 20px;
+                max-width: 100%;
+            }
+
+            .modal-form h2 {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+            }
+
+            .form-group {
+                margin-bottom: 18px;
+            }
+
+            .form-group label {
+                font-size: 0.9rem;
+            }
+
+            .form-group input[type="text"],
+            .form-group select {
+                padding: 10px;
+                font-size: 0.95rem;
+            }
+
+            .form-actions .btn {
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+
+            /* Modal de imagem */
+            .modal-content {
+                max-width: 95%;
+            }
+
+            .modal-image {
+                max-height: calc(90vh - 80px);
+            }
+
+            .modal-caption {
+                font-size: 1rem;
+                margin-top: 15px;
+            }
+
+            .modal-close {
+                top: -35px;
+                font-size: 35px;
+            }
+
+            /* Mensagens */
+            .message {
+                padding: 12px 15px;
+                font-size: 0.9rem;
+                margin-bottom: 15px;
+            }
+
+            /* Ajustes na navegação */
+            .category-link {
+                padding: 12px 15px;
+                font-size: 0.95rem;
+            }
+
+            .subcategory-link {
+                padding: 10px 15px 10px 35px;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* === Responsivo Mobile Pequeno === */
+        @media (max-width: 480px) {
+            .mobile-title {
+                font-size: 1rem;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .main-content {
+                padding: 15px 10px;
+            }
+
+            .image-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 10px;
+            }
+
+            .section-header-info h2 {
+                font-size: 1.2rem;
+            }
+
+            .section-header {
+                padding-bottom: 12px;
+            }
+
+            .add-product-btn {
+                padding: 12px 16px;
+                font-size: 0.9rem;
+            }
+
+            .image-card {
+                border-radius: 6px;
+            }
+
+            .image-info {
+                padding: 8px;
+            }
+
+            .image-name {
+                font-size: 0.8rem;
+            }
+
+            .sidebar-header h1 {
+                font-size: 1.3rem;
+            }
+
+            .sidebar-header .subtitle {
+                font-size: 0.8rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .action-buttons .btn {
+                width: 100%;
+            }
+
+            .modal-form {
+                padding: 20px 15px;
+            }
+
+            .modal-form h2 {
+                font-size: 1.3rem;
+            }
+        }
+
+        /* === Landscape Mobile === */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .main-content {
+                margin-top: 60px;
+            }
+
+            .image-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+
+            .modal-image {
+                max-height: calc(85vh - 80px);
+            }
+        }
+
+        /* === Scrollbar === */
+        .sidebar-nav::-webkit-scrollbar,
+        .main-content::-webkit-scrollbar,
+        .modal-form::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .sidebar-nav::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+        }
+
+        .sidebar-nav::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+        }
+
+        .sidebar-nav::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .main-content::-webkit-scrollbar-track,
+        .modal-form::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .main-content::-webkit-scrollbar-thumb,
+        .modal-form::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        .main-content::-webkit-scrollbar-thumb:hover,
+        .modal-form::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Mobile -->
+    <header class="mobile-header">
+        <div class="hamburger" onclick="toggleSidebar()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="mobile-title">Catálogo de Enxoval</div>
+    </header>
+
+    <!-- Overlay para fechar sidebar no mobile -->
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h1>Catálogo de Enxoval</h1>
+                <div class="subtitle">Pertences do Dominic</div>
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="openCategoryModal()">
+                    ➕ Categoria
+                </button>
+                <button class="btn btn-secondary" onclick="openProductModal()">
+                    📦 Produto
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="category-list" id="categoryList">
+                    <li class="category-item">
+                        <a href="#Bags--Mochilas" class="category-link" onclick="showSection('Bags--Mochilas', event)">
+                            Bags- Mochilas <span style="float: right; opacity: 0.7;">(2)</span>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="#Berço---Lençol---ninho-" class="category-link" onclick="showSection('Berço---Lençol---ninho-', event)">
+                            Berço - Lençol - ninho  <span style="float: right; opacity: 0.7;">(5)</span>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="#Bermuda" class="category-link" onclick="showSection('Bermuda', event)">
+                            Bermuda <span style="float: right; opacity: 0.7;">(2)</span>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="#Body" class="category-link" onclick="showSection('Body', event)">
+                            Body <span style="float: right; opacity: 0.7;">(40)</span>
+                        </a>
+                        <ul class="subcategory-list">
+                            <li class="subcategory-item">
+                                <a href="#Body_0-3-meses-Com-Manga" class="subcategory-link" onclick="showSection('Body_0-3-meses-Com-Manga', event)">
+                                    0-3 meses/Com Manga (14)
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="#Body_0-3-meses-Sem-Manga" class="subcategory-link" onclick="showSection('Body_0-3-meses-Sem-Manga', event)">
+                                    0-3 meses/Sem Manga (14)
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="#Body_1-ano-Sem-Manga" class="subcategory-link" onclick="showSection('Body_1-ano-Sem-Manga', event)">
+                                    1 ano/Sem Manga (5)
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="#Body_3-6-meses-Sem-Manga" class="subcategory-link" onclick="showSection('Body_3-6-meses-Sem-Manga', event)">
+                                    3-6 meses/Sem Manga (2)
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="#Body_6-9-meses-Com-Manga" class="subcategory-link" onclick="showSection('Body_6-9-meses-Com-Manga', event)">
+                                    6-9 meses/Com Manga (2)
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="#Body_6-9-meses-Sem-Manga" class="subcategory-link" onclick="showSection('Body_6-9-meses-Sem-Manga', event)">
+                                    6-9 meses/Sem Manga (3)
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="category-item">
+                        <a href="#Brinquedos" class="category-link" onclick="showSection('Brinquedos', event)">
+                            Brinquedos <span style="float: right; opacity: 0.7;">(10)</span>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="#Calçados" class="category-link" onclick="showSection('Calçados', event)">
+                            Calçados <span style="float: right; opacity: 0.7;">(4)</span>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="#Calças" class="category-link" onclick="showSection('Calças', event)">
+                            Calças <span style="float: right; opacity: 0.7;">(16)</span>
+                        </a>
+                        <ul class="subcategory-list">
+                            <li class="subcategory-item">
+                                <a href="#Calças_0-3-Meses" class="subcategory-link" onclick="showSection('Calças_0-3-Meses', event)">
+                                    0-3 Meses (10)
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="#Calças_2-Anos" class="subcategory-link" onclick="showSection('Calças_2-Anos', event)">
+                                    2 Anos (1)
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="#Calças_6-9-Meses" class="subcategory-link" onclick="showSection('Calças_6-9-Meses', event)">
+                                    6-9 Meses (5)
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="category-item">
+                        <a href="#Camiseta" class="category-link" onclick="showSection('Camiseta', event)">
+                            Camiseta <span style="float: right; opacity: 0.7;">(1)</span>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="#Casacos" class="category-link" onclick="showSection('Casacos', event)">
+                            Casacos <span style="float: right; opacity: 0.7;">(4)</span>
+                        </a>
+                        <ul class="subcategory-list">
+                            <li class="subcategory-item">
+                                <a href="#Casacos_0-3-meses" class="subcategory-link" onclick="showSection('Casacos_0-3-meses', event)">
+                                    0-3 meses (1)
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="#Casacos_2-anos" class="subcategory-link" onclick="showSection('Casacos_2-anos', event)">
+                                    2 anos (1)
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="#Casacos_6-9-meses" class="subcategory-link" onclick="showSection('Casacos_6-9-meses', event)">
+                                    6-9 meses (2)
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="category-item">
+                        <a href="#Cueiro" class="category-link" onclick="showSection('Cueiro', event)">
+                            Cueiro <span style="float: right; opacity: 0.7;">(6)</span>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="#Fraldas" class="category-link" onclick="showSection('Fraldas', event)">
+                            Fraldas <span style="float: right; opacity: 0.7;">(4)</span>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="#Higiene-saude" class="category-link" onclick="showSection('Higiene-saude', event)">
+                            Higiene-saude <span style="float: right; opacity: 0.7;">(6)</span>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="#Jardineira" class="category-link" onclick="showSection('Jardineira', event)">
+                            Jardineira <span style="float: right; opacity: 0.7;">(2)</span>
+                        </a>
+                        <ul class="subcategory-list">
+                            <li class="subcategory-item">
+                                <a href="#Jardineira_6-9-meses" class="subcategory-link" onclick="showSection('Jardineira_6-9-meses', event)">
+                                    6-9 meses (2)
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="category-item">
+                        <a href="#Macacão" class="category-link" onclick="showSection('Macacão', event)">
+                            Macacão <span style="float: right; opacity: 0.7;">(7)</span>
+                        </a>
+                        <ul class="subcategory-list">
+                            <li class="subcategory-item">
+                                <a href="#Macacão_0-3-meses" class="subcategory-link" onclick="showSection('Macacão_0-3-meses', event)">
+                                    0-3 meses (1)
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="#Macacão_3-6-meses" class="subcategory-link" onclick="showSection('Macacão_3-6-meses', event)">
+                                    3-6 meses (2)
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="#Macacão_6-9-meses" class="subcategory-link" onclick="showSection('Macacão_6-9-meses', event)">
+                                    6-9 meses (3)
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="#Macacão_9-12-meses" class="subcategory-link" onclick="showSection('Macacão_9-12-meses', event)">
+                                    9-12 meses (1)
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="category-item">
+                        <a href="#Manta" class="category-link" onclick="showSection('Manta', event)">
+                            Manta <span style="float: right; opacity: 0.7;">(3)</span>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="#Meias-e-luvas" class="category-link" onclick="showSection('Meias-e-luvas', event)">
+                            Meias e luvas <span style="float: right; opacity: 0.7;">(16)</span>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="#Naninha" class="category-link" onclick="showSection('Naninha', event)">
+                            Naninha <span style="float: right; opacity: 0.7;">(1)</span>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="#Pano-de-boca" class="category-link" onclick="showSection('Pano-de-boca', event)">
+                            Pano de boca <span style="float: right; opacity: 0.7;">(3)</span>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="#Tematico---Mesversario" class="category-link" onclick="showSection('Tematico---Mesversario', event)">
+                            Tematico - Mesversario <span style="float: right; opacity: 0.7;">(1)</span>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="#Toalha" class="category-link" onclick="showSection('Toalha', event)">
+                            Toalha <span style="float: right; opacity: 0.7;">(1)</span>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="#Toucas" class="category-link" onclick="showSection('Toucas', event)">
+                            Toucas <span style="float: right; opacity: 0.7;">(3)</span>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="#Utilitarios" class="category-link" onclick="showSection('Utilitarios', event)">
+                            Utilitarios <span style="float: right; opacity: 0.7;">(2)</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content" id="mainContent">
+            <section class="section" id="Bags--Mochilas" data-category="Bags- Mochilas">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Bags- Mochilas</h2>
+                        <div class="count">2 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Bags- Mochilas')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Bags-%20Mochilas/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Bags-%20Mochilas/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Bags-%20Mochilas/2.jpg', '2')">
+                        <div class="image-wrapper">
+                            <img src="Bags-%20Mochilas/2.jpg" alt="2" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="2">2</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Berço---Lençol---ninho-" data-category="Berço - Lençol - ninho ">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Berço - Lençol - ninho </h2>
+                        <div class="count">5 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Berço - Lençol - ninho ')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Berc%CC%A7o%20-%20Lenc%CC%A7ol%20-%20ninho%20/Lenc%CC%A7ol%20Azul.jpg', 'Lençol Azul')">
+                        <div class="image-wrapper">
+                            <img src="Berc%CC%A7o%20-%20Lenc%CC%A7ol%20-%20ninho%20/Lenc%CC%A7ol%20Azul.jpg" alt="Lençol Azul" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="Lençol Azul">Lençol Azul</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Berc%CC%A7o%20-%20Lenc%CC%A7ol%20-%20ninho%20/Lenc%CC%A7ol%20Coroa.jpg', 'Lençol Coroa')">
+                        <div class="image-wrapper">
+                            <img src="Berc%CC%A7o%20-%20Lenc%CC%A7ol%20-%20ninho%20/Lenc%CC%A7ol%20Coroa.jpg" alt="Lençol Coroa" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="Lençol Coroa">Lençol Coroa</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Berc%CC%A7o%20-%20Lenc%CC%A7ol%20-%20ninho%20/Mobile%20Berc%CC%A7o.jpg', 'Mobile Berço')">
+                        <div class="image-wrapper">
+                            <img src="Berc%CC%A7o%20-%20Lenc%CC%A7ol%20-%20ninho%20/Mobile%20Berc%CC%A7o.jpg" alt="Mobile Berço" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="Mobile Berço">Mobile Berço</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Berc%CC%A7o%20-%20Lenc%CC%A7ol%20-%20ninho%20/Ninho%20berc%CC%A7o%201.jpg', 'Ninho berço 1')">
+                        <div class="image-wrapper">
+                            <img src="Berc%CC%A7o%20-%20Lenc%CC%A7ol%20-%20ninho%20/Ninho%20berc%CC%A7o%201.jpg" alt="Ninho berço 1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="Ninho berço 1">Ninho berço 1</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Berc%CC%A7o%20-%20Lenc%CC%A7ol%20-%20ninho%20/Ninho%20Berc%CC%A7o%202.jpg', 'Ninho Berço 2')">
+                        <div class="image-wrapper">
+                            <img src="Berc%CC%A7o%20-%20Lenc%CC%A7ol%20-%20ninho%20/Ninho%20Berc%CC%A7o%202.jpg" alt="Ninho Berço 2" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="Ninho Berço 2">Ninho Berço 2</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Bermuda" data-category="Bermuda">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Bermuda</h2>
+                        <div class="count">2 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Bermuda')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Bermuda/1%20ano%20Short%20de%20Praia%20Peixes.jpg', '1 ano Short de Praia Peixes')">
+                        <div class="image-wrapper">
+                            <img src="Bermuda/1%20ano%20Short%20de%20Praia%20Peixes.jpg" alt="1 ano Short de Praia Peixes" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1 ano Short de Praia Peixes">1 ano Short de Praia Peixes</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Bermuda/6-9%20meses%201%20.jpg', '6-9 meses 1 ')">
+                        <div class="image-wrapper">
+                            <img src="Bermuda/6-9%20meses%201%20.jpg" alt="6-9 meses 1 " loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="6-9 meses 1 ">6-9 meses 1 </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Body_0-3-meses-Com-Manga" data-category="Body" data-subcategory="0-3 meses/Com Manga">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Body - 0-3 meses/Com Manga</h2>
+                        <div class="count">14 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Body', '0-3 meses/Com Manga')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Com%20Manga/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/2.jpg', '2')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Com%20Manga/2.jpg" alt="2" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="2">2</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/3.jpg', '3')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Com%20Manga/3.jpg" alt="3" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="3">3</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/4.jpg', '4')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Com%20Manga/4.jpg" alt="4" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="4">4</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/5.jpg', '5')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Com%20Manga/5.jpg" alt="5" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="5">5</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/6.jpg', '6')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Com%20Manga/6.jpg" alt="6" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="6">6</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/7.jpg', '7')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Com%20Manga/7.jpg" alt="7" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="7">7</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/8.jpg', '8')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Com%20Manga/8.jpg" alt="8" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="8">8</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/9.jpg', '9')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Com%20Manga/9.jpg" alt="9" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="9">9</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/10.jpg', '10')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Com%20Manga/10.jpg" alt="10" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="10">10</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/11.jpg', '11')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Com%20Manga/11.jpg" alt="11" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="11">11</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/12.jpg', '12')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Com%20Manga/12.jpg" alt="12" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="12">12</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/13.jpg', '13')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Com%20Manga/13.jpg" alt="13" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="13">13</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/14.jpg', '14')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Com%20Manga/14.jpg" alt="14" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="14">14</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Body_0-3-meses-Sem-Manga" data-category="Body" data-subcategory="0-3 meses/Sem Manga">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Body - 0-3 meses/Sem Manga</h2>
+                        <div class="count">14 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Body', '0-3 meses/Sem Manga')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Sem%20Manga/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/2.jpg', '2')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Sem%20Manga/2.jpg" alt="2" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="2">2</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/3.jpg', '3')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Sem%20Manga/3.jpg" alt="3" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="3">3</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/4.jpg', '4')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Sem%20Manga/4.jpg" alt="4" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="4">4</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/5.jpg', '5')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Sem%20Manga/5.jpg" alt="5" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="5">5</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/6.jpg', '6')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Sem%20Manga/6.jpg" alt="6" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="6">6</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/7.jpg', '7')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Sem%20Manga/7.jpg" alt="7" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="7">7</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/8.jpg', '8')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Sem%20Manga/8.jpg" alt="8" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="8">8</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/9.jpg', '9')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Sem%20Manga/9.jpg" alt="9" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="9">9</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/10.jpg', '10')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Sem%20Manga/10.jpg" alt="10" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="10">10</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/11.jpg', '11')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Sem%20Manga/11.jpg" alt="11" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="11">11</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/12.jpg', '12')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Sem%20Manga/12.jpg" alt="12" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="12">12</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/13.jpg', '13')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Sem%20Manga/13.jpg" alt="13" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="13">13</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/14.jpg', '14')">
+                        <div class="image-wrapper">
+                            <img src="Body/0-3%20meses/Sem%20Manga/14.jpg" alt="14" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="14">14</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Body_1-ano-Sem-Manga" data-category="Body" data-subcategory="1 ano/Sem Manga">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Body - 1 ano/Sem Manga</h2>
+                        <div class="count">5 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Body', '1 ano/Sem Manga')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Body/1%20ano/Sem%20Manga/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Body/1%20ano/Sem%20Manga/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/1%20ano/Sem%20Manga/2.jpg', '2')">
+                        <div class="image-wrapper">
+                            <img src="Body/1%20ano/Sem%20Manga/2.jpg" alt="2" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="2">2</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/1%20ano/Sem%20Manga/3.jpg', '3')">
+                        <div class="image-wrapper">
+                            <img src="Body/1%20ano/Sem%20Manga/3.jpg" alt="3" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="3">3</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/1%20ano/Sem%20Manga/4.jpg', '4')">
+                        <div class="image-wrapper">
+                            <img src="Body/1%20ano/Sem%20Manga/4.jpg" alt="4" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="4">4</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/1%20ano/Sem%20Manga/5.jpg', '5')">
+                        <div class="image-wrapper">
+                            <img src="Body/1%20ano/Sem%20Manga/5.jpg" alt="5" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="5">5</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Body_3-6-meses-Sem-Manga" data-category="Body" data-subcategory="3-6 meses/Sem Manga">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Body - 3-6 meses/Sem Manga</h2>
+                        <div class="count">2 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Body', '3-6 meses/Sem Manga')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Body/3-6%20meses/Sem%20Manga/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Body/3-6%20meses/Sem%20Manga/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/3-6%20meses/Sem%20Manga/2.jpg', '2')">
+                        <div class="image-wrapper">
+                            <img src="Body/3-6%20meses/Sem%20Manga/2.jpg" alt="2" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="2">2</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Body_6-9-meses-Com-Manga" data-category="Body" data-subcategory="6-9 meses/Com Manga">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Body - 6-9 meses/Com Manga</h2>
+                        <div class="count">2 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Body', '6-9 meses/Com Manga')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Body/6-9%20meses/Com%20Manga/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Body/6-9%20meses/Com%20Manga/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/6-9%20meses/Com%20Manga/2.jpg', '2')">
+                        <div class="image-wrapper">
+                            <img src="Body/6-9%20meses/Com%20Manga/2.jpg" alt="2" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="2">2</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Body_6-9-meses-Sem-Manga" data-category="Body" data-subcategory="6-9 meses/Sem Manga">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Body - 6-9 meses/Sem Manga</h2>
+                        <div class="count">3 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Body', '6-9 meses/Sem Manga')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Body/6-9%20meses/Sem%20Manga/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Body/6-9%20meses/Sem%20Manga/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/6-9%20meses/Sem%20Manga/2.jpg', '2')">
+                        <div class="image-wrapper">
+                            <img src="Body/6-9%20meses/Sem%20Manga/2.jpg" alt="2" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="2">2</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/6-9%20meses/Sem%20Manga/3.jpg', '3')">
+                        <div class="image-wrapper">
+                            <img src="Body/6-9%20meses/Sem%20Manga/3.jpg" alt="3" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="3">3</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Brinquedos" data-category="Brinquedos">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Brinquedos</h2>
+                        <div class="count">10 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Brinquedos')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Brinquedos/Abajur%20Nuvem.jpg', 'Abajur Nuvem')">
+                        <div class="image-wrapper">
+                            <img src="Brinquedos/Abajur%20Nuvem.jpg" alt="Abajur Nuvem" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="Abajur Nuvem">Abajur Nuvem</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Brinquedos/Boia%20peito%20e%20brac%CC%A7os%20Estrela%20do%20Mar.jpg', 'Boia peito e braços Estrela do Mar')">
+                        <div class="image-wrapper">
+                            <img src="Brinquedos/Boia%20peito%20e%20brac%CC%A7os%20Estrela%20do%20Mar.jpg" alt="Boia peito e braços Estrela do Mar" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="Boia peito e braços Estrela do Mar">Boia peito e braços Estrela do Mar</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Brinquedos/Bolinha%20chocalho%20.jpg', 'Bolinha chocalho ')">
+                        <div class="image-wrapper">
+                            <img src="Brinquedos/Bolinha%20chocalho%20.jpg" alt="Bolinha chocalho " loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="Bolinha chocalho ">Bolinha chocalho </div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Brinquedos/Celular.jpg', 'Celular')">
+                        <div class="image-wrapper">
+                            <img src="Brinquedos/Celular.jpg" alt="Celular" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="Celular">Celular</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Brinquedos/Chocalho%20Margarida.jpg', 'Chocalho Margarida')">
+                        <div class="image-wrapper">
+                            <img src="Brinquedos/Chocalho%20Margarida.jpg" alt="Chocalho Margarida" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="Chocalho Margarida">Chocalho Margarida</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Brinquedos/Chocalho%20Urso.jpg', 'Chocalho Urso')">
+                        <div class="image-wrapper">
+                            <img src="Brinquedos/Chocalho%20Urso.jpg" alt="Chocalho Urso" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="Chocalho Urso">Chocalho Urso</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Brinquedos/Haste%20encaixes.jpg', 'Haste encaixes')">
+                        <div class="image-wrapper">
+                            <img src="Brinquedos/Haste%20encaixes.jpg" alt="Haste encaixes" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="Haste encaixes">Haste encaixes</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Brinquedos/Livro%20Animais%20da%20Amazo%CC%82nia.jpg', 'Livro Animais da Amazônia')">
+                        <div class="image-wrapper">
+                            <img src="Brinquedos/Livro%20Animais%20da%20Amazo%CC%82nia.jpg" alt="Livro Animais da Amazônia" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="Livro Animais da Amazônia">Livro Animais da Amazônia</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Brinquedos/Livro%20Jardim.jpg', 'Livro Jardim')">
+                        <div class="image-wrapper">
+                            <img src="Brinquedos/Livro%20Jardim.jpg" alt="Livro Jardim" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="Livro Jardim">Livro Jardim</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Brinquedos/Livro%20Primeiras%20Palavras.jpg', 'Livro Primeiras Palavras')">
+                        <div class="image-wrapper">
+                            <img src="Brinquedos/Livro%20Primeiras%20Palavras.jpg" alt="Livro Primeiras Palavras" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="Livro Primeiras Palavras">Livro Primeiras Palavras</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Calçados" data-category="Calçados">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Calçados</h2>
+                        <div class="count">4 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Calçados')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Calc%CC%A7ados/1-%20Sapatilha%20aquatica.jpg', '1- Sapatilha aquatica')">
+                        <div class="image-wrapper">
+                            <img src="Calc%CC%A7ados/1-%20Sapatilha%20aquatica.jpg" alt="1- Sapatilha aquatica" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1- Sapatilha aquatica">1- Sapatilha aquatica</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Calc%CC%A7ados/2-%20Sapato%20branco%20e%20vermelho.jpg', '2- Sapato branco e vermelho')">
+                        <div class="image-wrapper">
+                            <img src="Calc%CC%A7ados/2-%20Sapato%20branco%20e%20vermelho.jpg" alt="2- Sapato branco e vermelho" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="2- Sapato branco e vermelho">2- Sapato branco e vermelho</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Calc%CC%A7ados/3-%20Tenis%20branco%20Nike.jpg', '3- Tenis branco Nike')">
+                        <div class="image-wrapper">
+                            <img src="Calc%CC%A7ados/3-%20Tenis%20branco%20Nike.jpg" alt="3- Tenis branco Nike" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="3- Tenis branco Nike">3- Tenis branco Nike</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Calc%CC%A7ados/4-%20Tenis%20cano%20medio%20Vans%20Azul.jpg', '4- Tenis cano medio Vans Azul')">
+                        <div class="image-wrapper">
+                            <img src="Calc%CC%A7ados/4-%20Tenis%20cano%20medio%20Vans%20Azul.jpg" alt="4- Tenis cano medio Vans Azul" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="4- Tenis cano medio Vans Azul">4- Tenis cano medio Vans Azul</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Calças_0-3-Meses" data-category="Calças" data-subcategory="0-3 Meses">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Calças - 0-3 Meses</h2>
+                        <div class="count">10 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Calças', '0-3 Meses')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Calc%CC%A7as/0-3%20Meses/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Calc%CC%A7as/0-3%20Meses/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Calc%CC%A7as/0-3%20Meses/2.jpg', '2')">
+                        <div class="image-wrapper">
+                            <img src="Calc%CC%A7as/0-3%20Meses/2.jpg" alt="2" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="2">2</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Calc%CC%A7as/0-3%20Meses/3.jpg', '3')">
+                        <div class="image-wrapper">
+                            <img src="Calc%CC%A7as/0-3%20Meses/3.jpg" alt="3" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="3">3</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Calc%CC%A7as/0-3%20Meses/4.jpg', '4')">
+                        <div class="image-wrapper">
+                            <img src="Calc%CC%A7as/0-3%20Meses/4.jpg" alt="4" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="4">4</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Calc%CC%A7as/0-3%20Meses/5.jpg', '5')">
+                        <div class="image-wrapper">
+                            <img src="Calc%CC%A7as/0-3%20Meses/5.jpg" alt="5" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="5">5</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Calc%CC%A7as/0-3%20Meses/6.jpg', '6')">
+                        <div class="image-wrapper">
+                            <img src="Calc%CC%A7as/0-3%20Meses/6.jpg" alt="6" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="6">6</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Calc%CC%A7as/0-3%20Meses/7.jpg', '7')">
+                        <div class="image-wrapper">
+                            <img src="Calc%CC%A7as/0-3%20Meses/7.jpg" alt="7" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="7">7</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Calc%CC%A7as/0-3%20Meses/8.jpg', '8')">
+                        <div class="image-wrapper">
+                            <img src="Calc%CC%A7as/0-3%20Meses/8.jpg" alt="8" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="8">8</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Calc%CC%A7as/0-3%20Meses/9.jpg', '9')">
+                        <div class="image-wrapper">
+                            <img src="Calc%CC%A7as/0-3%20Meses/9.jpg" alt="9" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="9">9</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Calc%CC%A7as/0-3%20Meses/11.jpg', '11')">
+                        <div class="image-wrapper">
+                            <img src="Calc%CC%A7as/0-3%20Meses/11.jpg" alt="11" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="11">11</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Calças_2-Anos" data-category="Calças" data-subcategory="2 Anos">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Calças - 2 Anos</h2>
+                        <div class="count">1 item</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Calças', '2 Anos')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Calc%CC%A7as/2%20Anos/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Calc%CC%A7as/2%20Anos/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Calças_6-9-Meses" data-category="Calças" data-subcategory="6-9 Meses">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Calças - 6-9 Meses</h2>
+                        <div class="count">5 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Calças', '6-9 Meses')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Calc%CC%A7as/6-9%20Meses/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Calc%CC%A7as/6-9%20Meses/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Calc%CC%A7as/6-9%20Meses/2.jpg', '2')">
+                        <div class="image-wrapper">
+                            <img src="Calc%CC%A7as/6-9%20Meses/2.jpg" alt="2" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="2">2</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Calc%CC%A7as/6-9%20Meses/3.jpg', '3')">
+                        <div class="image-wrapper">
+                            <img src="Calc%CC%A7as/6-9%20Meses/3.jpg" alt="3" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="3">3</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Calc%CC%A7as/6-9%20Meses/4.jpg', '4')">
+                        <div class="image-wrapper">
+                            <img src="Calc%CC%A7as/6-9%20Meses/4.jpg" alt="4" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="4">4</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Calc%CC%A7as/6-9%20Meses/5.jpg', '5')">
+                        <div class="image-wrapper">
+                            <img src="Calc%CC%A7as/6-9%20Meses/5.jpg" alt="5" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="5">5</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Camiseta" data-category="Camiseta">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Camiseta</h2>
+                        <div class="count">1 item</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Camiseta')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Camiseta/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Camiseta/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Casacos_0-3-meses" data-category="Casacos" data-subcategory="0-3 meses">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Casacos - 0-3 meses</h2>
+                        <div class="count">1 item</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Casacos', '0-3 meses')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Casacos/0-3%20meses/0-3%20meses%201.jpg', '0-3 meses 1')">
+                        <div class="image-wrapper">
+                            <img src="Casacos/0-3%20meses/0-3%20meses%201.jpg" alt="0-3 meses 1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="0-3 meses 1">0-3 meses 1</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Casacos_2-anos" data-category="Casacos" data-subcategory="2 anos">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Casacos - 2 anos</h2>
+                        <div class="count">1 item</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Casacos', '2 anos')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Casacos/2%20anos/2%20Anos%201.jpg', '2 Anos 1')">
+                        <div class="image-wrapper">
+                            <img src="Casacos/2%20anos/2%20Anos%201.jpg" alt="2 Anos 1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="2 Anos 1">2 Anos 1</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Casacos_6-9-meses" data-category="Casacos" data-subcategory="6-9 meses">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Casacos - 6-9 meses</h2>
+                        <div class="count">2 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Casacos', '6-9 meses')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Casacos/6-9%20meses/6-9%20meses%201.jpg', '6-9 meses 1')">
+                        <div class="image-wrapper">
+                            <img src="Casacos/6-9%20meses/6-9%20meses%201.jpg" alt="6-9 meses 1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="6-9 meses 1">6-9 meses 1</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Casacos/6-9%20meses/6-9%20meses%202.jpg', '6-9 meses 2')">
+                        <div class="image-wrapper">
+                            <img src="Casacos/6-9%20meses/6-9%20meses%202.jpg" alt="6-9 meses 2" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="6-9 meses 2">6-9 meses 2</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Cueiro" data-category="Cueiro">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Cueiro</h2>
+                        <div class="count">6 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Cueiro')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Cueiro/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Cueiro/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Cueiro/2.jpg', '2')">
+                        <div class="image-wrapper">
+                            <img src="Cueiro/2.jpg" alt="2" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="2">2</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Cueiro/3.jpg', '3')">
+                        <div class="image-wrapper">
+                            <img src="Cueiro/3.jpg" alt="3" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="3">3</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Cueiro/4.jpg', '4')">
+                        <div class="image-wrapper">
+                            <img src="Cueiro/4.jpg" alt="4" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="4">4</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Cueiro/5.jpg', '5')">
+                        <div class="image-wrapper">
+                            <img src="Cueiro/5.jpg" alt="5" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="5">5</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Cueiro/6.jpg', '6')">
+                        <div class="image-wrapper">
+                            <img src="Cueiro/6.jpg" alt="6" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="6">6</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Fraldas" data-category="Fraldas">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Fraldas</h2>
+                        <div class="count">4 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Fraldas')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Fraldas/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Fraldas/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Fraldas/2.jpg', '2')">
+                        <div class="image-wrapper">
+                            <img src="Fraldas/2.jpg" alt="2" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="2">2</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Fraldas/3.jpg', '3')">
+                        <div class="image-wrapper">
+                            <img src="Fraldas/3.jpg" alt="3" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="3">3</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Fraldas/4.jpg', '4')">
+                        <div class="image-wrapper">
+                            <img src="Fraldas/4.jpg" alt="4" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="4">4</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Higiene-saude" data-category="Higiene-saude">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Higiene-saude</h2>
+                        <div class="count">6 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Higiene-saude')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Higiene-saude/Babador%20Urso.jpg', 'Babador Urso')">
+                        <div class="image-wrapper">
+                            <img src="Higiene-saude/Babador%20Urso.jpg" alt="Babador Urso" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="Babador Urso">Babador Urso</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Higiene-saude/Cheirinho%20de%20bebe.jpg', 'Cheirinho de bebe')">
+                        <div class="image-wrapper">
+                            <img src="Higiene-saude/Cheirinho%20de%20bebe.jpg" alt="Cheirinho de bebe" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="Cheirinho de bebe">Cheirinho de bebe</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Higiene-saude/Kit%20porta%20chupeta%20e%20prendedor.jpg', 'Kit porta chupeta e prendedor')">
+                        <div class="image-wrapper">
+                            <img src="Higiene-saude/Kit%20porta%20chupeta%20e%20prendedor.jpg" alt="Kit porta chupeta e prendedor" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="Kit porta chupeta e prendedor">Kit porta chupeta e prendedor</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Higiene-saude/Prendedor%20de%20chupeta%20ursinho.jpeg', 'Prendedor de chupeta ursinho')">
+                        <div class="image-wrapper">
+                            <img src="Higiene-saude/Prendedor%20de%20chupeta%20ursinho.jpeg" alt="Prendedor de chupeta ursinho" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="Prendedor de chupeta ursinho">Prendedor de chupeta ursinho</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Higiene-saude/Termometro%20Banheira.jpg', 'Termometro Banheira')">
+                        <div class="image-wrapper">
+                            <img src="Higiene-saude/Termometro%20Banheira.jpg" alt="Termometro Banheira" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="Termometro Banheira">Termometro Banheira</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Higiene-saude/Trocador%20de%20Comoda.jpg', 'Trocador de Comoda')">
+                        <div class="image-wrapper">
+                            <img src="Higiene-saude/Trocador%20de%20Comoda.jpg" alt="Trocador de Comoda" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="Trocador de Comoda">Trocador de Comoda</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Jardineira_6-9-meses" data-category="Jardineira" data-subcategory="6-9 meses">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Jardineira - 6-9 meses</h2>
+                        <div class="count">2 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Jardineira', '6-9 meses')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Jardineira/6-9%20meses/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Jardineira/6-9%20meses/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Jardineira/6-9%20meses/2.jpg', '2')">
+                        <div class="image-wrapper">
+                            <img src="Jardineira/6-9%20meses/2.jpg" alt="2" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="2">2</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Macacão_0-3-meses" data-category="Macacão" data-subcategory="0-3 meses">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Macacão - 0-3 meses</h2>
+                        <div class="count">1 item</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Macacão', '0-3 meses')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Macaca%CC%83o/0-3%20meses/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Macaca%CC%83o/0-3%20meses/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Macacão_3-6-meses" data-category="Macacão" data-subcategory="3-6 meses">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Macacão - 3-6 meses</h2>
+                        <div class="count">2 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Macacão', '3-6 meses')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Macaca%CC%83o/3-6%20meses/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Macaca%CC%83o/3-6%20meses/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Macaca%CC%83o/3-6%20meses/2.jpg', '2')">
+                        <div class="image-wrapper">
+                            <img src="Macaca%CC%83o/3-6%20meses/2.jpg" alt="2" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="2">2</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Macacão_6-9-meses" data-category="Macacão" data-subcategory="6-9 meses">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Macacão - 6-9 meses</h2>
+                        <div class="count">3 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Macacão', '6-9 meses')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Macaca%CC%83o/6-9%20meses/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Macaca%CC%83o/6-9%20meses/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Macaca%CC%83o/6-9%20meses/2.jpg', '2')">
+                        <div class="image-wrapper">
+                            <img src="Macaca%CC%83o/6-9%20meses/2.jpg" alt="2" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="2">2</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Macaca%CC%83o/6-9%20meses/3.jpg', '3')">
+                        <div class="image-wrapper">
+                            <img src="Macaca%CC%83o/6-9%20meses/3.jpg" alt="3" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="3">3</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Macacão_9-12-meses" data-category="Macacão" data-subcategory="9-12 meses">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Macacão - 9-12 meses</h2>
+                        <div class="count">1 item</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Macacão', '9-12 meses')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Macaca%CC%83o/9-12%20meses/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Macaca%CC%83o/9-12%20meses/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Manta" data-category="Manta">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Manta</h2>
+                        <div class="count">3 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Manta')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Manta/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Manta/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Manta/2.jpg', '2')">
+                        <div class="image-wrapper">
+                            <img src="Manta/2.jpg" alt="2" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="2">2</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Manta/3.jpg', '3')">
+                        <div class="image-wrapper">
+                            <img src="Manta/3.jpg" alt="3" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="3">3</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Meias-e-luvas" data-category="Meias e luvas">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Meias e luvas</h2>
+                        <div class="count">16 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Meias e luvas')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Meias%20e%20luvas/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Meias%20e%20luvas/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Meias%20e%20luvas/2.jpg', '2')">
+                        <div class="image-wrapper">
+                            <img src="Meias%20e%20luvas/2.jpg" alt="2" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="2">2</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Meias%20e%20luvas/3.jpg', '3')">
+                        <div class="image-wrapper">
+                            <img src="Meias%20e%20luvas/3.jpg" alt="3" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="3">3</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Meias%20e%20luvas/4.jpg', '4')">
+                        <div class="image-wrapper">
+                            <img src="Meias%20e%20luvas/4.jpg" alt="4" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="4">4</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Meias%20e%20luvas/5.jpg', '5')">
+                        <div class="image-wrapper">
+                            <img src="Meias%20e%20luvas/5.jpg" alt="5" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="5">5</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Meias%20e%20luvas/6.jpg', '6')">
+                        <div class="image-wrapper">
+                            <img src="Meias%20e%20luvas/6.jpg" alt="6" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="6">6</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Meias%20e%20luvas/7.jpg', '7')">
+                        <div class="image-wrapper">
+                            <img src="Meias%20e%20luvas/7.jpg" alt="7" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="7">7</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Meias%20e%20luvas/8.jpg', '8')">
+                        <div class="image-wrapper">
+                            <img src="Meias%20e%20luvas/8.jpg" alt="8" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="8">8</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Meias%20e%20luvas/9.jpg', '9')">
+                        <div class="image-wrapper">
+                            <img src="Meias%20e%20luvas/9.jpg" alt="9" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="9">9</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Meias%20e%20luvas/10.jpg', '10')">
+                        <div class="image-wrapper">
+                            <img src="Meias%20e%20luvas/10.jpg" alt="10" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="10">10</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Meias%20e%20luvas/11.jpg', '11')">
+                        <div class="image-wrapper">
+                            <img src="Meias%20e%20luvas/11.jpg" alt="11" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="11">11</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Meias%20e%20luvas/12.jpg', '12')">
+                        <div class="image-wrapper">
+                            <img src="Meias%20e%20luvas/12.jpg" alt="12" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="12">12</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Meias%20e%20luvas/13.jpg', '13')">
+                        <div class="image-wrapper">
+                            <img src="Meias%20e%20luvas/13.jpg" alt="13" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="13">13</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Meias%20e%20luvas/14.jpg', '14')">
+                        <div class="image-wrapper">
+                            <img src="Meias%20e%20luvas/14.jpg" alt="14" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="14">14</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Meias%20e%20luvas/15.jpg', '15')">
+                        <div class="image-wrapper">
+                            <img src="Meias%20e%20luvas/15.jpg" alt="15" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="15">15</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Meias%20e%20luvas/16.jpg', '16')">
+                        <div class="image-wrapper">
+                            <img src="Meias%20e%20luvas/16.jpg" alt="16" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="16">16</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Naninha" data-category="Naninha">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Naninha</h2>
+                        <div class="count">1 item</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Naninha')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Naninha/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Naninha/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Pano-de-boca" data-category="Pano de boca">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Pano de boca</h2>
+                        <div class="count">3 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Pano de boca')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Pano%20de%20boca/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Pano%20de%20boca/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Pano%20de%20boca/2.jpg', '2')">
+                        <div class="image-wrapper">
+                            <img src="Pano%20de%20boca/2.jpg" alt="2" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="2">2</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Pano%20de%20boca/3.jpg', '3')">
+                        <div class="image-wrapper">
+                            <img src="Pano%20de%20boca/3.jpg" alt="3" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="3">3</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Tematico---Mesversario" data-category="Tematico - Mesversario">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Tematico - Mesversario</h2>
+                        <div class="count">1 item</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Tematico - Mesversario')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Tematico%20-%20Mesversario/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Tematico%20-%20Mesversario/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Toalha" data-category="Toalha">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Toalha</h2>
+                        <div class="count">1 item</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Toalha')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Toalha/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Toalha/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Toucas" data-category="Toucas">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Toucas</h2>
+                        <div class="count">3 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Toucas')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Toucas/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Toucas/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Toucas/2.jpg', '2')">
+                        <div class="image-wrapper">
+                            <img src="Toucas/2.jpg" alt="2" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="2">2</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Toucas/3.jpg', '3')">
+                        <div class="image-wrapper">
+                            <img src="Toucas/3.jpg" alt="3" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="3">3</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="Utilitarios" data-category="Utilitarios">
+                <div class="section-header">
+                    <div class="section-header-info">
+                        <h2>Utilitarios</h2>
+                        <div class="count">2 itens</div>
+                    </div>
+                    <button class="add-product-btn" onclick="openProductModal('Utilitarios')">
+                        ➕ Adicionar Produto
+                    </button>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openModal('Utilitarios/1.jpg', '1')">
+                        <div class="image-wrapper">
+                            <img src="Utilitarios/1.jpg" alt="1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="1">1</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Utilitarios/2.jpg', '2')">
+                        <div class="image-wrapper">
+                            <img src="Utilitarios/2.jpg" alt="2" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="2">2</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal para visualização ampliada -->
+    <div class="modal" id="imageModal" onclick="closeImageModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeImageModal()">&times;</button>
+            <img class="modal-image" id="modalImage" src="" alt="">
+            <div class="modal-caption" id="modalCaption"></div>
+        </div>
+    </div>
+
+    <!-- Modal para adicionar categoria -->
+    <div class="modal" id="categoryModal" onclick="closeCategoryModal()">
+        <div class="modal-form" onclick="event.stopPropagation()">
+            <h2>➕ Nova Categoria</h2>
+            <form id="categoryForm" onsubmit="handleCategorySubmit(event)">
+                <div class="form-group">
+                    <label for="categoryName">Nome da Categoria *</label>
+                    <input type="text" id="categoryName" name="categoryName" required 
+                           placeholder="Ex: Roupas, Brinquedos...">
+                </div>
+                <div class="form-group">
+                    <label for="subcategoryName">Subcategoria (opcional)</label>
+                    <input type="text" id="subcategoryName" name="subcategoryName" 
+                           placeholder="Ex: 0-3 meses, Com Manga...">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-cancel" onclick="closeCategoryModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-submit">Criar Categoria</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para adicionar produto -->
+    <div class="modal" id="productModal" onclick="closeProductModal()">
+        <div class="modal-form" onclick="event.stopPropagation()">
+            <h2>📦 Novo Produto</h2>
+            <form id="productForm" onsubmit="handleProductSubmit(event)">
+                <div class="form-group">
+                    <label for="productCategory">Categoria *</label>
+                    <select id="productCategory" name="productCategory" required onchange="loadSubcategories()">
+                        <option value="">Selecione uma categoria</option>
+                    </select>
+                </div>
+                <div class="form-group" id="subcategoryGroup" style="display: none;">
+                    <label for="productSubcategory">Subcategoria</label>
+                    <select id="productSubcategory" name="productSubcategory">
+                        <option value="">Nenhuma</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="productName">Nome do Produto *</label>
+                    <input type="text" id="productName" name="productName" required 
+                           placeholder="Ex: Body Azul com Estrelas">
+                </div>
+                <div class="form-group">
+                    <label for="productImage">Imagem do Produto *</label>
+                    <input type="file" id="productImage" name="productImage" 
+                           accept="image/jpeg,image/jpg,image/png,image/gif,image/webp" 
+                           required onchange="previewImage(event)">
+                    <div class="file-info">Formatos aceitos: JPG, PNG, GIF, WEBP (máx 5MB)</div>
+                </div>
+                <div class="file-preview" id="imagePreview"></div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-cancel" onclick="closeProductModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-submit">Adicionar Produto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Função para ordenação natural
+        function naturalSortKey(s) {
+            return s.replace(/(\d+)/g, (match) => match.padStart(10, '0')).toLowerCase();
+        }
+
+        // Dados de categorias
+        const categoriesData = ["Bags- Mochilas", "Berc\u0327o - Lenc\u0327ol - ninho ", "Bermuda", "Body", "Brinquedos", "Calc\u0327ados", "Calc\u0327as", "Camiseta", "Casacos", "Cueiro", "Fraldas", "Higiene-saude", "Jardineira", "Macaca\u0303o", "Manta", "Meias e luvas", "Naninha", "Pano de boca", "Tematico - Mesversario", "Toalha", "Toucas", "Utilitarios"];
+
+        // Toggle Sidebar Mobile
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            const hamburger = document.querySelector('.hamburger');
+
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+
+        // Fechar sidebar ao clicar em um link (mobile)
+        function closeSidebarOnMobile() {
+            if (window.innerWidth <= 768) {
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.querySelector('.sidebar-overlay');
+                const hamburger = document.querySelector('.hamburger');
+
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+                hamburger.classList.remove('active');
+            }
+        }
+
+        // Gerenciamento de navegação
+        function showSection(sectionId, event) {
+            if (event) {
+                event.preventDefault();
+            }
+
+            // Remover classe active de todas as seções
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Remover classe active de todos os links
+            document.querySelectorAll('.category-link, .subcategory-link').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Ativar seção atual
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.classList.add('active');
+
+                // Ativar link correspondente
+                const link = document.querySelector(`a[href="#${sectionId}"]`);
+                if (link) {
+                    link.classList.add('active');
+                }
+
+                // Scroll para o topo
+                document.getElementById('mainContent').scrollTop = 0;
+
+                // Fechar sidebar no mobile
+                closeSidebarOnMobile();
+            }
+        }
+
+        // Modal de imagem
+        function openModal(imagePath, caption) {
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalCaption = document.getElementById('modalCaption');
+
+            modalImage.src = decodeURIComponent(imagePath);
+            modalCaption.textContent = caption;
+            modal.classList.add('active');
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').classList.remove('active');
+        }
+
+        // Modal de categoria
+        function openCategoryModal() {
+            document.getElementById('categoryModal').classList.add('active');
+            document.getElementById('categoryForm').reset();
+        }
+
+        function closeCategoryModal() {
+            document.getElementById('categoryModal').classList.remove('active');
+        }
+
+        // Modal de produto
+        function openProductModal(category = '', subcategory = '') {
+            loadCategories();
+            document.getElementById('productModal').classList.add('active');
+            document.getElementById('productForm').reset();
+            document.getElementById('imagePreview').innerHTML = '';
+            
+            if (category) {
+                document.getElementById('productCategory').value = category;
+                loadSubcategories();
+                if (subcategory) {
+                    setTimeout(() => {
+                        document.getElementById('productSubcategory').value = subcategory;
+                    }, 100);
+                }
+            }
+        }
+
+        function closeProductModal() {
+            document.getElementById('productModal').classList.remove('active');
+        }
+
+        // Carregar categorias no select
+        function loadCategories() {
+            const select = document.getElementById('productCategory');
+            select.innerHTML = '<option value="">Selecione uma categoria</option>';
+            
+            categoriesData.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                select.appendChild(option);
+            });
+        }
+
+        // Carregar subcategorias baseado na categoria selecionada
+        function loadSubcategories() {
+            const category = document.getElementById('productCategory').value;
+            const subcategoryGroup = document.getElementById('subcategoryGroup');
+            const subcategorySelect = document.getElementById('productSubcategory');
+            
+            if (!category) {
+                subcategoryGroup.style.display = 'none';
+                return;
+            }
+
+            // Buscar subcategorias da seção ativa
+            const sections = document.querySelectorAll(`[data-category="${category}"]`);
+            const subcategories = new Set();
+            
+            sections.forEach(section => {
+                const subcat = section.getAttribute('data-subcategory');
+                if (subcat) {
+                    subcategories.add(subcat);
+                }
+            });
+
+            if (subcategories.size > 0) {
+                subcategoryGroup.style.display = 'block';
+                subcategorySelect.innerHTML = '<option value="">Selecione uma subcategoria</option>';
+                
+                // Ordenar subcategorias
+                const sortedSubcats = Array.from(subcategories).sort((a, b) => 
+                    naturalSortKey(a).localeCompare(naturalSortKey(b))
+                );
+                
+                sortedSubcats.forEach(subcat => {
+                    const option = document.createElement('option');
+                    option.value = subcat;
+                    option.textContent = subcat;
+                    subcategorySelect.appendChild(option);
+                });
+            } else {
+                subcategoryGroup.style.display = 'none';
+            }
+        }
+
+        // Preview da imagem
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('imagePreview');
+            
+            if (file) {
+                // Validar tamanho (5MB max)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('A imagem deve ter no máximo 5MB!');
+                    event.target.value = '';
+                    preview.innerHTML = '';
+                    return;
+                }
+
+                // Validar tipo
+                const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+                if (!validTypes.includes(file.type)) {
+                    alert('Formato inválido! Use JPG, PNG, GIF ou WEBP.');
+                    event.target.value = '';
+                    preview.innerHTML = '';
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `
+                        <img src="${e.target.result}" alt="Preview">
+                        <div class="file-info">${file.name} - ${(file.size / 1024).toFixed(1)} KB</div>
+                    `;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Submeter formulário de categoria
+        async function handleCategorySubmit(event) {
+            event.preventDefault();
+
+            const categoryName = document.getElementById('categoryName').value.trim();
+            const subcategoryName = document.getElementById('subcategoryName').value.trim();
+
+            if (!categoryName) {
+                alert('Por favor, informe o nome da categoria!');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/api/create-category', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        categoryName,
+                        subcategoryName
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showMessage('success', data.message);
+                    closeCategoryModal();
+
+                    // Atualizar a página após 2 segundos
+                    setTimeout(() => {
+                        regenerateHTML();
+                    }, 2000);
+                } else {
+                    showMessage('error', data.error || 'Erro ao criar categoria');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showMessage('error', 'Erro ao conectar com o servidor. Certifique-se de que o servidor está rodando (npm start).');
+            }
+        }
+
+        // Submeter formulário de produto
+        async function handleProductSubmit(event) {
+            event.preventDefault();
+
+            const category = document.getElementById('productCategory').value;
+            const subcategory = document.getElementById('productSubcategory').value;
+            const productName = document.getElementById('productName').value.trim();
+            const imageFile = document.getElementById('productImage').files[0];
+
+            if (!category || !productName || !imageFile) {
+                alert('Por favor, preencha todos os campos obrigatórios!');
+                return;
+            }
+
+            // Criar FormData para enviar a imagem
+            const formData = new FormData();
+            formData.append('category', category);
+            formData.append('subcategory', subcategory || '');
+            formData.append('productName', productName);
+            formData.append('image', imageFile);
+
+            try {
+                showMessage('success', 'Salvando produto...');
+
+                const response = await fetch('http://localhost:3000/api/add-product', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showMessage('success', data.message);
+                    closeProductModal();
+
+                    // Atualizar a página após 2 segundos
+                    setTimeout(() => {
+                        regenerateHTML();
+                    }, 2000);
+                } else {
+                    showMessage('error', data.error || 'Erro ao adicionar produto');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showMessage('error', 'Erro ao conectar com o servidor. Certifique-se de que o servidor está rodando (npm start).');
+            }
+        }
+
+        // Regenerar HTML
+        async function regenerateHTML() {
+            try {
+                showMessage('success', 'Atualizando catálogo...');
+
+                const response = await fetch('http://localhost:3000/api/regenerate-html', {
+                    method: 'POST'
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showMessage('success', data.message);
+
+                    // Recarregar a página após 2 segundos
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                } else {
+                    showMessage('error', data.error || 'Erro ao atualizar catálogo');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showMessage('error', 'Erro ao atualizar catálogo. Recarregue a página manualmente.');
+            }
+        }
+
+        // Mostrar mensagens
+        function showMessage(type, text) {
+            const mainContent = document.getElementById('mainContent');
+            const message = document.createElement('div');
+            message.className = `message message-${type}`;
+            message.textContent = text;
+            
+            mainContent.insertBefore(message, mainContent.firstChild);
+            
+            setTimeout(() => {
+                message.style.animation = 'slideDown 0.3s ease-out reverse';
+                setTimeout(() => message.remove(), 300);
+            }, 5000);
+        }
+
+        // Tecla ESC fecha modais
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeImageModal();
+                closeCategoryModal();
+                closeProductModal();
+            }
+        });
+
+        // Ativar primeira seção ao carregar
+        window.addEventListener('DOMContentLoaded', function() {
+            const firstLink = document.querySelector('.category-link, .subcategory-link');
+            if (firstLink) {
+                const href = firstLink.getAttribute('href');
+                const sectionId = href.substring(1);
+                showSection(sectionId);
+            }
+        });
+    </script>
+</body>
+</html>
