@@ -2,6 +2,7 @@
 import os
 import json
 from urllib.parse import quote
+import urllib.parse
 import re
 
 def natural_sort_key(s):
@@ -12,6 +13,17 @@ def natural_sort_key(s):
     return [int(text) if text.isdigit() else text.lower()
             for text in re.split('([0-9]+)', s)]
 
+def url_encode_path(path):
+    """
+    Codifica um caminho de arquivo para URL, mantendo as barras
+    """
+    # Dividir por / para codificar cada parte separadamente
+    parts = path.split('/')
+    # Codificar cada parte (quote com safe='' para codificar espaços também)
+    encoded_parts = [urllib.parse.quote(part, safe='') for part in parts]
+    # Juntar novamente com /
+    return '/'.join(encoded_parts)
+
 def get_thumbnail_path(image_path, base_dir):
     """
     Retorna o caminho do thumbnail se existir, caso contrário retorna o caminho original
@@ -20,9 +32,9 @@ def get_thumbnail_path(image_path, base_dir):
     thumbnail_abs = os.path.join(base_dir, '.thumbnails', image_path)
     if os.path.exists(thumbnail_abs):
         # Retornar caminho relativo para usar no HTML
-        return os.path.join('.thumbnails', image_path)
+        return os.path.join('.thumbnails', image_path).replace('\\', '/')
     # Se thumbnail não existe, usar imagem original
-    return image_path
+    return image_path.replace('\\', '/')
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
 categories = {}
@@ -213,9 +225,9 @@ for category_name in sorted(categories.keys(), key=natural_sort_key):
         # Adicionar itens
         for item in items:
             filename = os.path.splitext(item['filename'])[0]
-            # Usar replace para barras, mas não quote() para manter caracteres especiais
-            img_path = item['path'].replace('\\', '/')
-            thumb_path = item['thumbnail'].replace('\\', '/')
+            # Codificar caminhos para URL (necessário para Render.com)
+            img_path = url_encode_path(item['path'].replace('\\', '/'))
+            thumb_path = url_encode_path(item['thumbnail'].replace('\\', '/'))
 
             content_sections.append(f'''
                     <div class="image-card" onclick="openModal('{img_path}', '{filename}')">
@@ -270,8 +282,8 @@ for category_name in sorted(categories.keys(), key=natural_sort_key):
             # Adicionar itens desta subcategoria
             for item in items:
                 filename = os.path.splitext(item['filename'])[0]
-                img_path = item['path'].replace('\\', '/')
-                thumb_path = item['thumbnail'].replace('\\', '/')
+                img_path = url_encode_path(item['path'].replace('\\', '/'))
+                thumb_path = url_encode_path(item['thumbnail'].replace('\\', '/'))
 
                 content_sections.append(f'''
                         <div class="image-card" onclick="openModal('{img_path}', '{filename}')">
@@ -316,8 +328,8 @@ for category_name in sorted(categories.keys(), key=natural_sort_key):
             # Adicionar itens
             for item in items:
                 filename = os.path.splitext(item['filename'])[0]
-                img_path = item['path'].replace('\\', '/')
-                thumb_path = item['thumbnail'].replace('\\', '/')
+                img_path = url_encode_path(item['path'].replace('\\', '/'))
+                thumb_path = url_encode_path(item['thumbnail'].replace('\\', '/'))
 
                 content_sections.append(f'''
                     <div class="image-card" onclick="openModal('{img_path}', '{filename}')">
@@ -357,8 +369,8 @@ for category_name in sorted(categories.keys(), key=natural_sort_key):
             # Adicionar itens
             for item in items:
                 filename = os.path.splitext(item['filename'])[0]
-                img_path = item['path'].replace('\\', '/')
-                thumb_path = item['thumbnail'].replace('\\', '/')
+                img_path = url_encode_path(item['path'].replace('\\', '/'))
+                thumb_path = url_encode_path(item['thumbnail'].replace('\\', '/'))
 
                 content_sections.append(f'''
                     <div class="image-card" onclick="openModal('{img_path}', '{filename}')">
