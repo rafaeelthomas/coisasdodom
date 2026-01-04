@@ -130,12 +130,11 @@ app.post('/api/regenerate-html', (req, res) => {
 });
 
 // Iniciar servidor
-app.listen(PORT, () => {
-    console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
-    console.log(`📂 Diretório: ${__dirname}`);
-    console.log(`\n✅ Para usar o catálogo:`);
-    console.log(`   1. Acesse: http://localhost:${PORT}/index.html`);
-    console.log(`   2. Use os botões para adicionar categorias e produtos`);
-    console.log(`   3. As imagens serão salvas automaticamente nas pastas corretas`);
-    console.log(`\n⚠️  Para parar o servidor: Ctrl + C`);
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`? Servidor rodando na porta ${PORT}`);
+    console.log(`? Diret�rio: ${__dirname}`);
+    console.log(`? Acesse: ${process.env.RENDER_EXTERNAL_URL || 'http://localhost:' + PORT}`);
 });
