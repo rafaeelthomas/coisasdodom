@@ -21,6 +21,42 @@ const ADMIN_USERS = process.env.ADMIN_USERS
         { username: 'rafael', password: 'rafael123' }
       ];
 
+// Sistema de Logs de Auditoria
+const LOGS_FILE = path.join(__dirname, 'audit_logs.json');
+
+// Inicializar arquivo de logs se não existir
+if (!fs.existsSync(LOGS_FILE)) {
+    fs.writeFileSync(LOGS_FILE, JSON.stringify([], null, 2));
+}
+
+// Função para adicionar log
+function addAuditLog(action, username, details = {}) {
+    try {
+        const logs = JSON.parse(fs.readFileSync(LOGS_FILE, 'utf8'));
+
+        const logEntry = {
+            id: Date.now(),
+            timestamp: new Date().toISOString(),
+            date: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
+            username: username,
+            action: action,
+            details: details
+        };
+
+        logs.unshift(logEntry); // Adiciona no início (mais recente primeiro)
+
+        // Manter apenas os últimos 1000 logs
+        if (logs.length > 1000) {
+            logs.splice(1000);
+        }
+
+        fs.writeFileSync(LOGS_FILE, JSON.stringify(logs, null, 2));
+        console.log(`📝 Log: ${username} - ${action}`);
+    } catch (error) {
+        console.error('❌ Erro ao salvar log:', error);
+    }
+}
+
 // Configurar sessão
 app.use(session({
     secret: process.env.SESSION_SECRET || 'catalogo-secret-key-change-in-production',
@@ -114,6 +150,13 @@ app.post('/api/login', (req, res) => {
         if (user) {
             req.session.isAdmin = true;
             req.session.username = username;
+
+            // Registrar login
+            addAuditLog('LOGIN', username, {
+                ip: req.ip,
+                userAgent: req.headers['user-agent']
+            });
+
             res.json({
                 success: true,
                 message: `Bem-vindo, ${username}!`,
@@ -131,6 +174,11 @@ app.post('/api/login', (req, res) => {
 // Rota de logout
 app.post('/api/logout', (req, res) => {
     try {
+        const username = req.session.username || 'desconhecido';
+
+        // Registrar logout
+        addAuditLog('LOGOUT', username);
+
         req.session.destroy((err) => {
             if (err) {
                 console.error('Erro ao fazer logout:', err);
@@ -154,6 +202,23 @@ app.get('/api/auth-status', (req, res) => {
     });
 });
 
+// Rota para obter logs de auditoria
+app.get('/api/audit-logs', requireAdmin, (req, res) => {
+    try {
+        const limit = parseInt(req.query.limit) || 100;
+        const logs = JSON.parse(fs.readFileSync(LOGS_FILE, 'utf8'));
+
+        res.json({
+            success: true,
+            logs: logs.slice(0, limit),
+            total: logs.length
+        });
+    } catch (error) {
+        console.error('Erro ao ler logs:', error);
+        res.status(500).json({ error: 'Erro ao carregar logs: ' + error.message });
+    }
+});
+
 // Rota para criar categoria/subcategoria
 app.post('/api/create-category', requireAdmin, (req, res) => {
     try {
@@ -171,6 +236,13 @@ app.post('/api/create-category', requireAdmin, (req, res) => {
         // Criar pasta
         if (!fs.existsSync(folderPath)) {
             fs.mkdirSync(folderPath, { recursive: true });
+            
+            // Registrar log
+            addAuditLog('CRIAR_CATEGORIA', req.session.username || 'desconhecido', {
+                categoria: categoryName,
+                subcategoria: subcategoryName || null
+            });
+            
             res.json({
                 success: true,
                 message: `Categoria "${categoryName}"${subcategoryName ? ' / "' + subcategoryName + '"' : ''} criada com sucesso!`,
@@ -228,6 +300,14 @@ app.post('/api/add-product', requireAdmin, upload.single('image'), async (req, r
 
         // Gerar thumbnail
         await generateThumbnail(req.file.path);
+
+        // Registrar log
+        addAuditLog('ADICIONAR_PRODUTO', req.session.username || 'desconhecido', {
+            produto: productName,
+            categoria: category,
+            subcategoria: subcategory || null,
+            arquivo: req.file.filename
+        });
 
         // Regenerar HTML automaticamente
         exec(`cd "${__dirname}" && python3 generate_catalog.py`, (error, stdout, stderr) => {
@@ -347,6 +427,16 @@ app.put('/api/rename-product', requireAdmin, (req, res) => {
             ? 'Produto movido e renomeado com sucesso!'
             : 'Produto renomeado com sucesso!';
 
+        // Registrar log
+        addAuditLog(newCategory && newCategory !== currentCategory ? 'MOVER_PRODUTO' : 'RENOMEAR_PRODUTO', req.session.username || 'desconhecido', {
+            produtoAntigo: imagePath.split('/').pop(),
+            produtoNovo: newName,
+            categoriaAntiga: currentCategory,
+            categoriaNova: newCategory || currentCategory,
+            subcategoriaAntiga: currentSubcategory,
+            subcategoriaNova: newSubcategory || currentSubcategory
+        });
+
         res.json({
             success: true,
             message: actionMessage,
@@ -384,6 +474,12 @@ app.delete('/api/delete-product', requireAdmin, (req, res) => {
             fs.unlinkSync(thumbnailPath);
             console.log(`✅ Thumbnail deletado: ${thumbnailPath}`);
         }
+
+        // Registrar log
+        addAuditLog('DELETAR_PRODUTO', req.session.username || 'desconhecido', {
+            produto: imagePath.split('/').pop(),
+            caminho: imagePath
+        });
 
         // Regenerar HTML automaticamente
         exec(`cd "${__dirname}" && python3 generate_catalog.py`, (error, stdout, stderr) => {

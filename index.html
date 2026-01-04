@@ -257,9 +257,13 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            display: flex;
+            display: none;
             align-items: center;
             gap: 8px;
+        }
+
+        body.is-admin .add-product-btn {
+            display: flex;
         }
 
         .add-product-btn:hover {
@@ -1056,6 +1060,11 @@
                 </button>
                 <button class="btn btn-secondary" onclick="openProductModal()">
                     📦 Produto
+                </button>
+            </div>
+            <div class="auth-button-container admin-only" style="border-top: 1px solid rgba(255,255,255,0.1);">
+                <button class="btn" style="background: #8e44ad; color: white; width: 100%;" onclick="openLogsModal()">
+                    📋 Ver Logs
                 </button>
             </div>
             <nav class="sidebar-nav">
@@ -5213,6 +5222,22 @@
         </div>
     </div>
 
+    <!-- Modal de Logs de Auditoria -->
+    <div class="modal" id="logsModal" onclick="closeLogsModal()">
+        <div class="modal-form" onclick="event.stopPropagation()" style="max-width: 900px; max-height: 80vh;">
+            <h2 style="color: #8e44ad;">📋 Logs de Auditoria</h2>
+            <div style="padding: 20px 0; max-height: 60vh; overflow-y: auto;">
+                <div id="logsContent" style="font-family: 'Courier New', monospace; font-size: 0.9rem;">
+                    <p style="text-align: center; color: #95a5a6;">Carregando logs...</p>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-cancel" onclick="closeLogsModal()">Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="refreshLogs()">🔄 Atualizar</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Função para ordenação natural
         function naturalSortKey(s) {
@@ -5356,6 +5381,127 @@
         // Verificar autenticação ao carregar
         checkAuthStatus();
 
+        // === LOGS DE AUDITORIA ===
+
+        // Abrir modal de logs
+        async function openLogsModal() {
+            document.getElementById('logsModal').classList.add('active');
+            await loadLogs();
+        }
+
+        // Fechar modal de logs
+        function closeLogsModal() {
+            document.getElementById('logsModal').classList.remove('active');
+        }
+
+        // Carregar logs
+        async function loadLogs() {
+            const logsContent = document.getElementById('logsContent');
+            logsContent.innerHTML = '<p style="text-align: center; color: #95a5a6;">Carregando logs...</p>';
+
+            try {
+                const response = await fetch('/api/audit-logs?limit=100', {
+                    credentials: 'include'
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.logs && data.logs.length > 0) {
+                    let html = `<div style="margin-bottom: 15px; padding: 10px; background: #ecf0f1; border-radius: 6px;">
+                        <strong>Total de logs:</strong> ${data.total} | <strong>Mostrando:</strong> ${data.logs.length}
+                    </div>`;
+
+                    html += '<table style="width: 100%; border-collapse: collapse;">';
+                    html += '<thead><tr style="background: #34495e; color: white; text-align: left;">';
+                    html += '<th style="padding: 10px; border: 1px solid #ddd;">Data/Hora</th>';
+                    html += '<th style="padding: 10px; border: 1px solid #ddd;">Usuário</th>';
+                    html += '<th style="padding: 10px; border: 1px solid #ddd;">Ação</th>';
+                    html += '<th style="padding: 10px; border: 1px solid #ddd;">Detalhes</th>';
+                    html += '</tr></thead><tbody>';
+
+                    data.logs.forEach((log, index) => {
+                        const bgColor = index % 2 === 0 ? '#ffffff' : '#f9f9f9';
+                        const actionColor = getActionColor(log.action);
+
+                        html += `<tr style="background: ${bgColor};">`;
+                        html += `<td style="padding: 8px; border: 1px solid #ddd; font-size: 0.85rem;">${log.date}</td>`;
+                        html += `<td style="padding: 8px; border: 1px solid #ddd;"><strong>${log.username}</strong></td>`;
+                        html += `<td style="padding: 8px; border: 1px solid #ddd;"><span style="background: ${actionColor}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">${formatAction(log.action)}</span></td>`;
+                        html += `<td style="padding: 8px; border: 1px solid #ddd; font-size: 0.85rem;">${formatDetails(log.details)}</td>`;
+                        html += '</tr>';
+                    });
+
+                    html += '</tbody></table>';
+                    logsContent.innerHTML = html;
+                } else {
+                    logsContent.innerHTML = '<p style="text-align: center; color: #95a5a6;">Nenhum log encontrado.</p>';
+                }
+            } catch (error) {
+                console.error('Erro ao carregar logs:', error);
+                logsContent.innerHTML = '<p style="text-align: center; color: #e74c3c;">❌ Erro ao carregar logs. Tente novamente.</p>';
+            }
+        }
+
+        // Atualizar logs
+        async function refreshLogs() {
+            await loadLogs();
+        }
+
+        // Formatar ação
+        function formatAction(action) {
+            const actions = {
+                'LOGIN': '🔓 Login',
+                'LOGOUT': '🔒 Logout',
+                'CRIAR_CATEGORIA': '➕ Criar Categoria',
+                'ADICIONAR_PRODUTO': '📦 Adicionar Produto',
+                'RENOMEAR_PRODUTO': '✏️ Renomear Produto',
+                'MOVER_PRODUTO': '📁 Mover Produto',
+                'DELETAR_PRODUTO': '🗑️ Deletar Produto'
+            };
+            return actions[action] || action;
+        }
+
+        // Cor da ação
+        function getActionColor(action) {
+            const colors = {
+                'LOGIN': '#27ae60',
+                'LOGOUT': '#95a5a6',
+                'CRIAR_CATEGORIA': '#3498db',
+                'ADICIONAR_PRODUTO': '#2ecc71',
+                'RENOMEAR_PRODUTO': '#f39c12',
+                'MOVER_PRODUTO': '#9b59b6',
+                'DELETAR_PRODUTO': '#e74c3c'
+            };
+            return colors[action] || '#7f8c8d';
+        }
+
+        // Formatar detalhes
+        function formatDetails(details) {
+            if (!details || Object.keys(details).length === 0) return '-';
+
+            let text = '';
+            for (const [key, value] of Object.entries(details)) {
+                if (value === null || value === undefined) continue;
+                if (key === 'ip' || key === 'userAgent') continue;
+
+                const label = {
+                    'produto': 'Produto',
+                    'produtoAntigo': 'De',
+                    'produtoNovo': 'Para',
+                    'categoria': 'Categoria',
+                    'categoriaAntiga': 'De',
+                    'categoriaNova': 'Para',
+                    'subcategoria': 'Subcategoria',
+                    'subcategoriaAntiga': 'Subcat. Anterior',
+                    'subcategoriaNova': 'Subcat. Nova',
+                    'arquivo': 'Arquivo',
+                    'caminho': 'Caminho'
+                }[key] || key;
+
+                text += `${label}: <strong>${value}</strong><br>`;
+            }
+            return text || '-';
+        }
 
         // Toggle Sidebar Mobile
         function toggleSidebar() {
