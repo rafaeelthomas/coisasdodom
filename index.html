@@ -389,6 +389,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            overflow: auto;
+        }
+
+        .modal-content.zoomed {
+            overflow: auto;
+            cursor: move;
         }
 
         .modal-image {
@@ -396,6 +402,16 @@
             max-height: calc(90vh - 100px);
             object-fit: contain;
             border-radius: 8px;
+            cursor: zoom-in;
+            transition: transform 0.3s ease;
+            transform-origin: center center;
+        }
+
+        .modal-image.zoomed {
+            cursor: zoom-out;
+            transform: scale(2);
+            max-width: none;
+            max-height: none;
         }
 
         .modal-caption {
@@ -1357,6 +1373,9 @@
                     </div>
                     <div class="image-grid">
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/1.jpg', '1')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Com%20Manga/1.jpg', '1', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Com%20Manga/1.jpg', '1', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1368,6 +1387,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/2.jpg', '2')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Com%20Manga/2.jpg', '2', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Com%20Manga/2.jpg', '2', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1379,6 +1401,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/3.jpg', '3')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Com%20Manga/3.jpg', '3', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Com%20Manga/3.jpg', '3', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1390,6 +1415,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/4.jpg', '4')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Com%20Manga/4.jpg', '4', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Com%20Manga/4.jpg', '4', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1401,6 +1429,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/5.jpg', '5')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Com%20Manga/5.jpg', '5', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Com%20Manga/5.jpg', '5', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1412,6 +1443,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/6.jpg', '6')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Com%20Manga/6.jpg', '6', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Com%20Manga/6.jpg', '6', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1423,6 +1457,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/7.jpg', '7')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Com%20Manga/7.jpg', '7', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Com%20Manga/7.jpg', '7', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1434,6 +1471,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/8.jpg', '8')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Com%20Manga/8.jpg', '8', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Com%20Manga/8.jpg', '8', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1445,6 +1485,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/9.jpg', '9')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Com%20Manga/9.jpg', '9', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Com%20Manga/9.jpg', '9', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1456,6 +1499,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/10.jpg', '10')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Com%20Manga/10.jpg', '10', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Com%20Manga/10.jpg', '10', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1467,6 +1513,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/11.jpg', '11')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Com%20Manga/11.jpg', '11', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Com%20Manga/11.jpg', '11', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1478,6 +1527,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/12.jpg', '12')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Com%20Manga/12.jpg', '12', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Com%20Manga/12.jpg', '12', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1489,6 +1541,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/13.jpg', '13')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Com%20Manga/13.jpg', '13', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Com%20Manga/13.jpg', '13', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1500,6 +1555,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/14.jpg', '14')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Com%20Manga/14.jpg', '14', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Com%20Manga/14.jpg', '14', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1524,6 +1582,9 @@
                     </div>
                     <div class="image-grid">
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/1.jpg', '1')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Sem%20Manga/1.jpg', '1', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Sem%20Manga/1.jpg', '1', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1535,6 +1596,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/2.jpg', '2')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Sem%20Manga/2.jpg', '2', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Sem%20Manga/2.jpg', '2', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1546,6 +1610,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/3.jpg', '3')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Sem%20Manga/3.jpg', '3', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Sem%20Manga/3.jpg', '3', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1557,6 +1624,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/4.jpg', '4')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Sem%20Manga/4.jpg', '4', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Sem%20Manga/4.jpg', '4', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1568,6 +1638,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/5.jpg', '5')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Sem%20Manga/5.jpg', '5', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Sem%20Manga/5.jpg', '5', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1579,6 +1652,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/6.jpg', '6')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Sem%20Manga/6.jpg', '6', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Sem%20Manga/6.jpg', '6', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1590,6 +1666,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/7.jpg', '7')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Sem%20Manga/7.jpg', '7', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Sem%20Manga/7.jpg', '7', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1601,6 +1680,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/8.jpg', '8')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Sem%20Manga/8.jpg', '8', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Sem%20Manga/8.jpg', '8', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1612,6 +1694,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/9.jpg', '9')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Sem%20Manga/9.jpg', '9', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Sem%20Manga/9.jpg', '9', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1623,6 +1708,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/10.jpg', '10')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Sem%20Manga/10.jpg', '10', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Sem%20Manga/10.jpg', '10', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1634,6 +1722,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/11.jpg', '11')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Sem%20Manga/11.jpg', '11', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Sem%20Manga/11.jpg', '11', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1645,6 +1736,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/12.jpg', '12')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Sem%20Manga/12.jpg', '12', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Sem%20Manga/12.jpg', '12', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1656,6 +1750,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/13.jpg', '13')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Sem%20Manga/13.jpg', '13', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Sem%20Manga/13.jpg', '13', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1667,6 +1764,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/14.jpg', '14')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Sem%20Manga/14.jpg', '14', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Sem%20Manga/14.jpg', '14', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1691,6 +1791,9 @@
                     </div>
                     <div class="image-grid">
                         <div class="image-card" onclick="openModal('Body/1%20ano/Sem%20Manga/1.jpg', '1')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/1%20ano/Sem%20Manga/1.jpg', '1', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/1%20ano/Sem%20Manga/1.jpg', '1', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1702,6 +1805,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/1%20ano/Sem%20Manga/2.jpg', '2')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/1%20ano/Sem%20Manga/2.jpg', '2', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/1%20ano/Sem%20Manga/2.jpg', '2', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1713,6 +1819,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/1%20ano/Sem%20Manga/3.jpg', '3')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/1%20ano/Sem%20Manga/3.jpg', '3', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/1%20ano/Sem%20Manga/3.jpg', '3', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1724,6 +1833,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/1%20ano/Sem%20Manga/4.jpg', '4')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/1%20ano/Sem%20Manga/4.jpg', '4', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/1%20ano/Sem%20Manga/4.jpg', '4', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1735,6 +1847,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/1%20ano/Sem%20Manga/5.jpg', '5')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/1%20ano/Sem%20Manga/5.jpg', '5', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/1%20ano/Sem%20Manga/5.jpg', '5', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1759,6 +1874,9 @@
                     </div>
                     <div class="image-grid">
                         <div class="image-card" onclick="openModal('Body/3-6%20meses/Sem%20Manga/1.jpg', '1')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/3-6%20meses/Sem%20Manga/1.jpg', '1', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/3-6%20meses/Sem%20Manga/1.jpg', '1', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1770,6 +1888,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/3-6%20meses/Sem%20Manga/2.jpg', '2')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/3-6%20meses/Sem%20Manga/2.jpg', '2', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/3-6%20meses/Sem%20Manga/2.jpg', '2', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1794,6 +1915,9 @@
                     </div>
                     <div class="image-grid">
                         <div class="image-card" onclick="openModal('Body/6-9%20meses/Com%20Manga/1.jpg', '1')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/6-9%20meses/Com%20Manga/1.jpg', '1', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/6-9%20meses/Com%20Manga/1.jpg', '1', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1805,6 +1929,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/6-9%20meses/Com%20Manga/2.jpg', '2')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/6-9%20meses/Com%20Manga/2.jpg', '2', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/6-9%20meses/Com%20Manga/2.jpg', '2', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1829,6 +1956,9 @@
                     </div>
                     <div class="image-grid">
                         <div class="image-card" onclick="openModal('Body/6-9%20meses/Sem%20Manga/1.jpg', '1')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/6-9%20meses/Sem%20Manga/1.jpg', '1', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/6-9%20meses/Sem%20Manga/1.jpg', '1', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1840,6 +1970,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/6-9%20meses/Sem%20Manga/2.jpg', '2')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/6-9%20meses/Sem%20Manga/2.jpg', '2', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/6-9%20meses/Sem%20Manga/2.jpg', '2', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -1851,6 +1984,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/6-9%20meses/Sem%20Manga/3.jpg', '3')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/6-9%20meses/Sem%20Manga/3.jpg', '3', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Body/6-9%20meses/Sem%20Manga/3.jpg', '3', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -2743,6 +2879,9 @@
                     </div>
                     <div class="image-grid">
                         <div class="image-card" onclick="openModal('Calcas/0-3%20Meses/1.jpg', '1')">
+                            <button class="edit-btn" onclick="openRenameModal('Calcas/0-3%20Meses/1.jpg', '1', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Calcas/0-3%20Meses/1.jpg', '1', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -2754,6 +2893,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Calcas/0-3%20Meses/2.jpg', '2')">
+                            <button class="edit-btn" onclick="openRenameModal('Calcas/0-3%20Meses/2.jpg', '2', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Calcas/0-3%20Meses/2.jpg', '2', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -2765,6 +2907,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Calcas/0-3%20Meses/3.jpg', '3')">
+                            <button class="edit-btn" onclick="openRenameModal('Calcas/0-3%20Meses/3.jpg', '3', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Calcas/0-3%20Meses/3.jpg', '3', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -2776,6 +2921,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Calcas/0-3%20Meses/4.jpg', '4')">
+                            <button class="edit-btn" onclick="openRenameModal('Calcas/0-3%20Meses/4.jpg', '4', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Calcas/0-3%20Meses/4.jpg', '4', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -2787,6 +2935,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Calcas/0-3%20Meses/5.jpg', '5')">
+                            <button class="edit-btn" onclick="openRenameModal('Calcas/0-3%20Meses/5.jpg', '5', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Calcas/0-3%20Meses/5.jpg', '5', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -2798,6 +2949,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Calcas/0-3%20Meses/6.jpg', '6')">
+                            <button class="edit-btn" onclick="openRenameModal('Calcas/0-3%20Meses/6.jpg', '6', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Calcas/0-3%20Meses/6.jpg', '6', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -2809,6 +2963,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Calcas/0-3%20Meses/7.jpg', '7')">
+                            <button class="edit-btn" onclick="openRenameModal('Calcas/0-3%20Meses/7.jpg', '7', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Calcas/0-3%20Meses/7.jpg', '7', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -2820,6 +2977,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Calcas/0-3%20Meses/8.jpg', '8')">
+                            <button class="edit-btn" onclick="openRenameModal('Calcas/0-3%20Meses/8.jpg', '8', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Calcas/0-3%20Meses/8.jpg', '8', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -2831,6 +2991,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Calcas/0-3%20Meses/9.jpg', '9')">
+                            <button class="edit-btn" onclick="openRenameModal('Calcas/0-3%20Meses/9.jpg', '9', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Calcas/0-3%20Meses/9.jpg', '9', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -2842,6 +3005,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Calcas/0-3%20Meses/11.jpg', '11')">
+                            <button class="edit-btn" onclick="openRenameModal('Calcas/0-3%20Meses/11.jpg', '11', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Calcas/0-3%20Meses/11.jpg', '11', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -2866,6 +3032,9 @@
                     </div>
                     <div class="image-grid">
                         <div class="image-card" onclick="openModal('Calcas/2%20Anos/1.jpg', '1')">
+                            <button class="edit-btn" onclick="openRenameModal('Calcas/2%20Anos/1.jpg', '1', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Calcas/2%20Anos/1.jpg', '1', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -2890,6 +3059,9 @@
                     </div>
                     <div class="image-grid">
                         <div class="image-card" onclick="openModal('Calcas/6-9%20Meses/1.jpg', '1')">
+                            <button class="edit-btn" onclick="openRenameModal('Calcas/6-9%20Meses/1.jpg', '1', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Calcas/6-9%20Meses/1.jpg', '1', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -2901,6 +3073,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Calcas/6-9%20Meses/2.jpg', '2')">
+                            <button class="edit-btn" onclick="openRenameModal('Calcas/6-9%20Meses/2.jpg', '2', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Calcas/6-9%20Meses/2.jpg', '2', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -2912,6 +3087,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Calcas/6-9%20Meses/3.jpg', '3')">
+                            <button class="edit-btn" onclick="openRenameModal('Calcas/6-9%20Meses/3.jpg', '3', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Calcas/6-9%20Meses/3.jpg', '3', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -2923,6 +3101,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Calcas/6-9%20Meses/4.jpg', '4')">
+                            <button class="edit-btn" onclick="openRenameModal('Calcas/6-9%20Meses/4.jpg', '4', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Calcas/6-9%20Meses/4.jpg', '4', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -2934,6 +3115,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Calcas/6-9%20Meses/5.jpg', '5')">
+                            <button class="edit-btn" onclick="openRenameModal('Calcas/6-9%20Meses/5.jpg', '5', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Calcas/6-9%20Meses/5.jpg', '5', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -3256,6 +3440,9 @@
                     </div>
                     <div class="image-grid">
                         <div class="image-card" onclick="openModal('Casacos/0-3%20meses/0-3%20meses%201.jpg', '0-3 meses 1')">
+                            <button class="edit-btn" onclick="openRenameModal('Casacos/0-3%20meses/0-3%20meses%201.jpg', '0-3 meses 1', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Casacos/0-3%20meses/0-3%20meses%201.jpg', '0-3 meses 1', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -3280,6 +3467,9 @@
                     </div>
                     <div class="image-grid">
                         <div class="image-card" onclick="openModal('Casacos/2%20anos/2%20Anos%201.jpg', '2 Anos 1')">
+                            <button class="edit-btn" onclick="openRenameModal('Casacos/2%20anos/2%20Anos%201.jpg', '2 Anos 1', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Casacos/2%20anos/2%20Anos%201.jpg', '2 Anos 1', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -3304,6 +3494,9 @@
                     </div>
                     <div class="image-grid">
                         <div class="image-card" onclick="openModal('Casacos/6-9%20meses/6-9%20meses%201.jpg', '6-9 meses 1')">
+                            <button class="edit-btn" onclick="openRenameModal('Casacos/6-9%20meses/6-9%20meses%201.jpg', '6-9 meses 1', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Casacos/6-9%20meses/6-9%20meses%201.jpg', '6-9 meses 1', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -3315,6 +3508,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Casacos/6-9%20meses/6-9%20meses%202.jpg', '6-9 meses 2')">
+                            <button class="edit-btn" onclick="openRenameModal('Casacos/6-9%20meses/6-9%20meses%202.jpg', '6-9 meses 2', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Casacos/6-9%20meses/6-9%20meses%202.jpg', '6-9 meses 2', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -3775,6 +3971,9 @@
                     </div>
                     <div class="image-grid">
                         <div class="image-card" onclick="openModal('Jardineira/6-9%20meses/1.jpg', '1')">
+                            <button class="edit-btn" onclick="openRenameModal('Jardineira/6-9%20meses/1.jpg', '1', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Jardineira/6-9%20meses/1.jpg', '1', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -3786,6 +3985,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Jardineira/6-9%20meses/2.jpg', '2')">
+                            <button class="edit-btn" onclick="openRenameModal('Jardineira/6-9%20meses/2.jpg', '2', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Jardineira/6-9%20meses/2.jpg', '2', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -3859,6 +4061,9 @@
                     </div>
                     <div class="image-grid">
                         <div class="image-card" onclick="openModal('Macacao/0-3%20meses/1.jpg', '1')">
+                            <button class="edit-btn" onclick="openRenameModal('Macacao/0-3%20meses/1.jpg', '1', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Macacao/0-3%20meses/1.jpg', '1', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -3883,6 +4088,9 @@
                     </div>
                     <div class="image-grid">
                         <div class="image-card" onclick="openModal('Macacao/3-6%20meses/1.jpg', '1')">
+                            <button class="edit-btn" onclick="openRenameModal('Macacao/3-6%20meses/1.jpg', '1', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Macacao/3-6%20meses/1.jpg', '1', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -3894,6 +4102,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Macacao/3-6%20meses/2.jpg', '2')">
+                            <button class="edit-btn" onclick="openRenameModal('Macacao/3-6%20meses/2.jpg', '2', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Macacao/3-6%20meses/2.jpg', '2', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -3918,6 +4129,9 @@
                     </div>
                     <div class="image-grid">
                         <div class="image-card" onclick="openModal('Macacao/6-9%20meses/1.jpg', '1')">
+                            <button class="edit-btn" onclick="openRenameModal('Macacao/6-9%20meses/1.jpg', '1', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Macacao/6-9%20meses/1.jpg', '1', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -3929,6 +4143,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Macacao/6-9%20meses/2.jpg', '2')">
+                            <button class="edit-btn" onclick="openRenameModal('Macacao/6-9%20meses/2.jpg', '2', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Macacao/6-9%20meses/2.jpg', '2', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -3940,6 +4157,9 @@
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Macacao/6-9%20meses/3.jpg', '3')">
+                            <button class="edit-btn" onclick="openRenameModal('Macacao/6-9%20meses/3.jpg', '3', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Macacao/6-9%20meses/3.jpg', '3', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -3964,6 +4184,9 @@
                     </div>
                     <div class="image-grid">
                         <div class="image-card" onclick="openModal('Macacao/9-12%20meses/1.jpg', '1')">
+                            <button class="edit-btn" onclick="openRenameModal('Macacao/9-12%20meses/1.jpg', '1', event)" title="Renomear produto">
+                                ✏️
+                            </button>
                             <button class="delete-btn" onclick="openDeleteModal('Macacao/9-12%20meses/1.jpg', '1', event)" title="Deletar produto">
                                 ✕
                             </button>
@@ -4940,14 +5163,32 @@
             const modal = document.getElementById('imageModal');
             const modalImage = document.getElementById('modalImage');
             const modalCaption = document.getElementById('modalCaption');
+            const modalContent = document.querySelector('#imageModal .modal-content');
 
             modalImage.src = decodeURIComponent(imagePath);
             modalCaption.textContent = caption;
             modal.classList.add('active');
+
+            // Remover zoom ao abrir modal
+            modalImage.classList.remove('zoomed');
+            modalContent.classList.remove('zoomed');
+
+            // Adicionar evento de clique para zoom
+            modalImage.onclick = function(e) {
+                e.stopPropagation();
+                modalImage.classList.toggle('zoomed');
+                modalContent.classList.toggle('zoomed');
+            };
         }
 
         function closeImageModal() {
-            document.getElementById('imageModal').classList.remove('active');
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalContent = document.querySelector('#imageModal .modal-content');
+
+            modal.classList.remove('active');
+            modalImage.classList.remove('zoomed');
+            modalContent.classList.remove('zoomed');
         }
 
         // Modal de categoria
