@@ -231,6 +231,9 @@ for category_name in sorted(categories.keys(), key=natural_sort_key):
 
             content_sections.append(f'''
                     <div class="image-card" onclick="openModal('{img_path}', '{filename}')">
+                        <button class="edit-btn" onclick="openRenameModal('{img_path}', '{filename}', event)" title="Renomear produto">
+                            ✏️
+                        </button>
                         <button class="delete-btn" onclick="openDeleteModal('{img_path}', '{filename}', event)" title="Deletar produto">
                             ✕
                         </button>
@@ -333,6 +336,9 @@ for category_name in sorted(categories.keys(), key=natural_sort_key):
 
                 content_sections.append(f'''
                     <div class="image-card" onclick="openModal('{img_path}', '{filename}')">
+                        <button class="edit-btn" onclick="openRenameModal('{img_path}', '{filename}', event)" title="Renomear produto">
+                            ✏️
+                        </button>
                         <button class="delete-btn" onclick="openDeleteModal('{img_path}', '{filename}', event)" title="Deletar produto">
                             ✕
                         </button>
@@ -374,6 +380,9 @@ for category_name in sorted(categories.keys(), key=natural_sort_key):
 
                 content_sections.append(f'''
                     <div class="image-card" onclick="openModal('{img_path}', '{filename}')">
+                        <button class="edit-btn" onclick="openRenameModal('{img_path}', '{filename}', event)" title="Renomear produto">
+                            ✏️
+                        </button>
                         <button class="delete-btn" onclick="openDeleteModal('{img_path}', '{filename}', event)" title="Deletar produto">
                             ✕
                         </button>

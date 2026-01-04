@@ -158,6 +158,71 @@ app.post('/api/add-product', upload.single('image'), async (req, res) => {
     }
 });
 
+// Rota para renomear produto
+app.put('/api/rename-product', (req, res) => {
+    try {
+        const { imagePath, newName } = req.body;
+
+        if (!imagePath || !newName) {
+            return res.status(400).json({ error: 'Caminho da imagem e novo nome são obrigatórios' });
+        }
+
+        const oldPath = path.join(__dirname, imagePath);
+        const oldThumbnailPath = path.join(__dirname, '.thumbnails', imagePath);
+
+        // Verificar se o arquivo existe
+        if (!fs.existsSync(oldPath)) {
+            return res.status(404).json({ error: 'Arquivo não encontrado' });
+        }
+
+        // Obter extensão do arquivo original
+        const extension = path.extname(oldPath);
+
+        // Criar novo caminho com o novo nome
+        const directory = path.dirname(oldPath);
+        const newPath = path.join(directory, `${newName}${extension}`);
+        const newThumbnailPath = path.join(path.dirname(oldThumbnailPath), `${newName}${extension}`);
+
+        // Verificar se já existe um arquivo com o novo nome
+        if (fs.existsSync(newPath) && oldPath !== newPath) {
+            return res.status(400).json({ error: 'Já existe um produto com esse nome nesta categoria' });
+        }
+
+        // Renomear a imagem original
+        fs.renameSync(oldPath, newPath);
+        console.log(`✅ Imagem renomeada: ${oldPath} → ${newPath}`);
+
+        // Renomear o thumbnail se existir
+        if (fs.existsSync(oldThumbnailPath)) {
+            // Criar diretório do thumbnail se não existir
+            const thumbnailDir = path.dirname(newThumbnailPath);
+            if (!fs.existsSync(thumbnailDir)) {
+                fs.mkdirSync(thumbnailDir, { recursive: true });
+            }
+            fs.renameSync(oldThumbnailPath, newThumbnailPath);
+            console.log(`✅ Thumbnail renomeado: ${oldThumbnailPath} → ${newThumbnailPath}`);
+        }
+
+        // Regenerar HTML automaticamente
+        exec(`cd "${__dirname}" && python3 generate_catalog.py`, (error, stdout, stderr) => {
+            if (error) {
+                console.error('❌ Erro ao regerar HTML:', error);
+            } else {
+                console.log('✅ HTML regenerado após renomeação');
+            }
+        });
+
+        res.json({
+            success: true,
+            message: 'Produto renomeado com sucesso!',
+            needsReload: true
+        });
+    } catch (error) {
+        console.error('Erro ao renomear produto:', error);
+        res.status(500).json({ error: 'Erro ao renomear produto: ' + error.message });
+    }
+});
+
 // Rota para deletar produto
 app.delete('/api/delete-product', (req, res) => {
     try {
