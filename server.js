@@ -158,10 +158,10 @@ app.post('/api/add-product', upload.single('image'), async (req, res) => {
     }
 });
 
-// Rota para renomear produto
+// Rota para renomear/mover produto
 app.put('/api/rename-product', (req, res) => {
     try {
-        const { imagePath, newName } = req.body;
+        const { imagePath, newName, newCategory, newSubcategory } = req.body;
 
         if (!imagePath || !newName) {
             return res.status(400).json({ error: 'Caminho da imagem e novo nome são obrigatórios' });
@@ -178,21 +178,41 @@ app.put('/api/rename-product', (req, res) => {
         // Obter extensão do arquivo original
         const extension = path.extname(oldPath);
 
-        // Criar novo caminho com o novo nome
-        const directory = path.dirname(oldPath);
-        const newPath = path.join(directory, `${newName}${extension}`);
-        const newThumbnailPath = path.join(path.dirname(oldThumbnailPath), `${newName}${extension}`);
+        // Extrair categoria e subcategoria atuais do caminho
+        const pathParts = imagePath.split('/');
+        const currentCategory = pathParts[0];
+        const currentSubcategory = pathParts.length > 2 ? pathParts.slice(1, -1).join('/') : '';
 
-        // Verificar se já existe um arquivo com o novo nome
+        // Determinar novo diretório
+        let newDirectory = path.join(__dirname, newCategory || currentCategory);
+        if (newSubcategory) {
+            newDirectory = path.join(newDirectory, newSubcategory);
+        } else if (!newCategory && currentSubcategory) {
+            // Se não foi fornecida nova categoria, manter subcategoria atual
+            newDirectory = path.join(newDirectory, currentSubcategory);
+        }
+
+        // Criar novo diretório se não existir
+        if (!fs.existsSync(newDirectory)) {
+            fs.mkdirSync(newDirectory, { recursive: true });
+            console.log(`📁 Diretório criado: ${newDirectory}`);
+        }
+
+        // Criar novo caminho com o novo nome
+        const newPath = path.join(newDirectory, `${newName}${extension}`);
+        const newRelativePath = newPath.replace(__dirname + path.sep, '');
+        const newThumbnailPath = path.join(__dirname, '.thumbnails', newRelativePath);
+
+        // Verificar se já existe um arquivo com o novo nome no destino
         if (fs.existsSync(newPath) && oldPath !== newPath) {
             return res.status(400).json({ error: 'Já existe um produto com esse nome nesta categoria' });
         }
 
-        // Renomear a imagem original
+        // Mover/renomear a imagem original
         fs.renameSync(oldPath, newPath);
-        console.log(`✅ Imagem renomeada: ${oldPath} → ${newPath}`);
+        console.log(`✅ Imagem movida: ${oldPath} → ${newPath}`);
 
-        // Renomear o thumbnail se existir
+        // Mover/renomear o thumbnail se existir
         if (fs.existsSync(oldThumbnailPath)) {
             // Criar diretório do thumbnail se não existir
             const thumbnailDir = path.dirname(newThumbnailPath);
@@ -200,7 +220,26 @@ app.put('/api/rename-product', (req, res) => {
                 fs.mkdirSync(thumbnailDir, { recursive: true });
             }
             fs.renameSync(oldThumbnailPath, newThumbnailPath);
-            console.log(`✅ Thumbnail renomeado: ${oldThumbnailPath} → ${newThumbnailPath}`);
+            console.log(`✅ Thumbnail movido: ${oldThumbnailPath} → ${newThumbnailPath}`);
+        }
+
+        // Tentar remover diretório antigo se estiver vazio
+        try {
+            const oldDirectory = path.dirname(oldPath);
+            const oldThumbnailDir = path.dirname(oldThumbnailPath);
+
+            if (fs.existsSync(oldDirectory) && fs.readdirSync(oldDirectory).length === 0) {
+                fs.rmdirSync(oldDirectory);
+                console.log(`🗑️  Diretório vazio removido: ${oldDirectory}`);
+            }
+
+            if (fs.existsSync(oldThumbnailDir) && fs.readdirSync(oldThumbnailDir).length === 0) {
+                fs.rmdirSync(oldThumbnailDir);
+                console.log(`🗑️  Diretório de thumbnail vazio removido: ${oldThumbnailDir}`);
+            }
+        } catch (e) {
+            // Ignorar erros ao remover diretórios vazios
+            console.log(`ℹ️  Não foi possível remover diretórios vazios: ${e.message}`);
         }
 
         // Regenerar HTML automaticamente
@@ -208,18 +247,22 @@ app.put('/api/rename-product', (req, res) => {
             if (error) {
                 console.error('❌ Erro ao regerar HTML:', error);
             } else {
-                console.log('✅ HTML regenerado após renomeação');
+                console.log('✅ HTML regenerado após edição');
             }
         });
 
+        const actionMessage = (newCategory && newCategory !== currentCategory) || (newSubcategory !== currentSubcategory)
+            ? 'Produto movido e renomeado com sucesso!'
+            : 'Produto renomeado com sucesso!';
+
         res.json({
             success: true,
-            message: 'Produto renomeado com sucesso!',
+            message: actionMessage,
             needsReload: true
         });
     } catch (error) {
-        console.error('Erro ao renomear produto:', error);
-        res.status(500).json({ error: 'Erro ao renomear produto: ' + error.message });
+        console.error('Erro ao editar produto:', error);
+        res.status(500).json({ error: 'Erro ao editar produto: ' + error.message });
     }
 });
 

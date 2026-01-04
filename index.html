@@ -5052,23 +5052,36 @@
         </div>
     </div>
 
-    <!-- Modal de renomear produto -->
+    <!-- Modal de editar produto -->
     <div class="modal" id="renameModal" onclick="closeRenameModal()">
-        <div class="modal-form" onclick="event.stopPropagation()" style="max-width: 450px;">
-            <h2 style="color: #3498db;">✏️ Renomear Produto</h2>
+        <div class="modal-form" onclick="event.stopPropagation()" style="max-width: 500px;">
+            <h2 style="color: #3498db;">✏️ Editar Produto</h2>
             <form id="renameForm" onsubmit="confirmRename(event)">
+                <div style="padding: 10px 0 15px; font-size: 0.95rem; color: #7f8c8d; border-bottom: 1px solid #ecf0f1; margin-bottom: 15px;">
+                    <strong>Produto atual:</strong> <span id="currentProductName" style="color: #2c3e50;"></span><br>
+                    <strong>Localização:</strong> <span id="currentProductLocation" style="color: #2c3e50;"></span>
+                </div>
                 <div class="form-group">
-                    <label for="renameProductName">Novo Nome do Produto *</label>
+                    <label for="renameProductName">Nome do Produto *</label>
                     <input type="text" id="renameProductName" name="renameProductName" required
                            placeholder="Digite o novo nome">
                 </div>
-                <div style="padding: 10px 0; font-size: 0.9rem; color: #7f8c8d;">
-                    <strong>Produto atual:</strong> <span id="currentProductName" style="color: #2c3e50;"></span>
+                <div class="form-group">
+                    <label for="renameCategory">Categoria *</label>
+                    <select id="renameCategory" name="renameCategory" required onchange="loadRenameSubcategories()">
+                        <option value="">Selecione uma categoria</option>
+                    </select>
+                </div>
+                <div class="form-group" id="renameSubcategoryGroup" style="display: none;">
+                    <label for="renameSubcategory">Subcategoria</label>
+                    <select id="renameSubcategory" name="renameSubcategory">
+                        <option value="">Selecione uma subcategoria</option>
+                    </select>
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn btn-cancel" onclick="closeRenameModal()">Cancelar</button>
                     <button type="submit" class="btn" style="background: #3498db; color: white;">
-                        ✏️ Renomear
+                        💾 Salvar Alterações
                     </button>
                 </div>
             </form>
@@ -5580,48 +5593,140 @@
             imageToRename = imagePath;
             imageNameToRename = imageName;
 
-            document.getElementById('currentProductName').textContent = imageName;
-            document.getElementById('renameProductName').value = imageName;
-            document.getElementById('renameModal').classList.add('active');
+            // Extrair categoria e subcategoria do caminho
+            const pathParts = imagePath.split('/');
+            const currentCategory = pathParts[0];
+            const currentSubcategory = pathParts.length > 2 ? pathParts.slice(1, -1).join('/') : '';
+            const location = currentSubcategory ? `${currentCategory} / ${currentSubcategory}` : currentCategory;
 
-            // Focar no input após um pequeno delay
+            document.getElementById('currentProductName').textContent = imageName;
+            document.getElementById('currentProductLocation').textContent = location;
+            document.getElementById('renameProductName').value = imageName;
+
+            // Carregar categorias no select
+            loadRenameCategories();
+
+            // Preencher categoria e subcategoria atuais
             setTimeout(() => {
+                document.getElementById('renameCategory').value = currentCategory;
+                loadRenameSubcategories();
+
+                if (currentSubcategory) {
+                    setTimeout(() => {
+                        document.getElementById('renameSubcategory').value = currentSubcategory;
+                    }, 100);
+                }
+
                 document.getElementById('renameProductName').focus();
                 document.getElementById('renameProductName').select();
             }, 100);
+
+            document.getElementById('renameModal').classList.add('active');
+        }
+
+        // Carregar categorias no select de renomear
+        function loadRenameCategories() {
+            const select = document.getElementById('renameCategory');
+            select.innerHTML = '<option value="">Selecione uma categoria</option>';
+
+            categoriesData.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                select.appendChild(option);
+            });
+        }
+
+        // Carregar subcategorias para renomear
+        function loadRenameSubcategories() {
+            const category = document.getElementById('renameCategory').value;
+            const subcategoryGroup = document.getElementById('renameSubcategoryGroup');
+            const subcategorySelect = document.getElementById('renameSubcategory');
+
+            if (!category) {
+                subcategoryGroup.style.display = 'none';
+                return;
+            }
+
+            // Buscar subcategorias da categoria selecionada
+            const sections = document.querySelectorAll(`[data-category="${category}"]`);
+            const subcategories = new Set();
+
+            sections.forEach(section => {
+                const subcat = section.getAttribute('data-subcategory');
+                if (subcat) {
+                    subcategories.add(subcat);
+                }
+            });
+
+            if (subcategories.size > 0) {
+                subcategoryGroup.style.display = 'block';
+                subcategorySelect.innerHTML = '<option value="">Nenhuma (raiz da categoria)</option>';
+
+                const sortedSubcats = Array.from(subcategories).sort((a, b) =>
+                    naturalSortKey(a).localeCompare(naturalSortKey(b))
+                );
+
+                sortedSubcats.forEach(subcat => {
+                    const option = document.createElement('option');
+                    option.value = subcat;
+                    option.textContent = subcat;
+                    subcategorySelect.appendChild(option);
+                });
+            } else {
+                subcategoryGroup.style.display = 'none';
+            }
         }
 
         // Fechar modal de renomear
         function closeRenameModal() {
             document.getElementById('renameModal').classList.remove('active');
             document.getElementById('renameForm').reset();
+            document.getElementById('renameSubcategoryGroup').style.display = 'none';
             imageToRename = null;
             imageNameToRename = null;
         }
 
-        // Confirmar e executar renomeação
+        // Confirmar e executar renomeação/movimentação
         async function confirmRename(event) {
             event.preventDefault();
 
             if (!imageToRename) {
-                alert('Erro: Nenhuma imagem selecionada para renomear');
+                alert('Erro: Nenhuma imagem selecionada para editar');
                 return;
             }
 
             const newName = document.getElementById('renameProductName').value.trim();
+            const newCategory = document.getElementById('renameCategory').value;
+            const newSubcategory = document.getElementById('renameSubcategory').value || '';
 
             if (!newName) {
-                alert('Por favor, insira um novo nome');
+                alert('Por favor, insira um nome para o produto');
                 return;
             }
 
-            if (newName === imageNameToRename) {
-                alert('O novo nome é igual ao nome atual');
+            if (!newCategory) {
+                alert('Por favor, selecione uma categoria');
+                return;
+            }
+
+            // Verificar se houve alguma mudança
+            const pathParts = imageToRename.split('/');
+            const currentCategory = pathParts[0];
+            const currentSubcategory = pathParts.length > 2 ? pathParts.slice(1, -1).join('/') : '';
+
+            const nameChanged = newName !== imageNameToRename;
+            const categoryChanged = newCategory !== currentCategory;
+            const subcategoryChanged = newSubcategory !== currentSubcategory;
+
+            if (!nameChanged && !categoryChanged && !subcategoryChanged) {
+                alert('Nenhuma alteração foi feita');
                 return;
             }
 
             try {
-                showMessage('success', 'Renomeando produto...');
+                const action = (categoryChanged || subcategoryChanged) ? 'Movendo e salvando' : 'Salvando';
+                showMessage('success', `${action} alterações...`);
 
                 const response = await fetch('/api/rename-product', {
                     method: 'PUT',
@@ -5630,7 +5735,9 @@
                     },
                     body: JSON.stringify({
                         imagePath: decodeURIComponent(imageToRename),
-                        newName: newName
+                        newName: newName,
+                        newCategory: newCategory,
+                        newSubcategory: newSubcategory
                     })
                 });
 
@@ -5645,7 +5752,7 @@
                         location.reload();
                     }, 2000);
                 } else {
-                    showMessage('error', data.error || 'Erro ao renomear produto');
+                    showMessage('error', data.error || 'Erro ao salvar alterações');
                 }
             } catch (error) {
                 console.error('Erro:', error);
