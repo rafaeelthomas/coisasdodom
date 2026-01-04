@@ -11,7 +11,16 @@ const app = express();
 // Configurar middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(__dirname));
+
+// Servir arquivos estáticos com opções para lidar com encoding
+app.use(express.static(__dirname, {
+    setHeaders: (res, path) => {
+        // Garantir encoding correto para caracteres especiais
+        if (path.endsWith('.jpg') || path.endsWith('.png') || path.endsWith('.gif') || path.endsWith('.webp')) {
+            res.set('Content-Type', 'image/jpeg');
+        }
+    }
+}));
 
 // Configurar multer para upload de imagens
 const storage = multer.diskStorage({
@@ -193,6 +202,20 @@ app.delete('/api/delete-product', (req, res) => {
     } catch (error) {
         console.error('Erro ao deletar produto:', error);
         res.status(500).json({ error: 'Erro ao deletar produto: ' + error.message });
+    }
+});
+
+// Rota para servir imagens com tratamento de encoding
+app.get('*.(jpg|jpeg|png|gif|webp)', (req, res, next) => {
+    // Decodificar o caminho da URL
+    const decodedPath = decodeURIComponent(req.path);
+    const filePath = path.join(__dirname, decodedPath);
+
+    // Verificar se o arquivo existe
+    if (fs.existsSync(filePath)) {
+        res.sendFile(filePath);
+    } else {
+        next(); // Se não encontrar, deixa o express.static tentar
     }
 });
 
