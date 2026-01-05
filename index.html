@@ -6208,18 +6208,28 @@
 
             // Preencher categoria e subcategoria atuais
             setTimeout(() => {
+                // Selecionar categoria
                 document.getElementById('renameCategory').value = currentCategory;
+
+                // Carregar subcategorias e selecionar a atual
                 loadRenameSubcategories();
 
+                // Aguardar um pouco mais para garantir que as subcategorias foram carregadas
                 if (currentSubcategory) {
                     setTimeout(() => {
-                        document.getElementById('renameSubcategory').value = currentSubcategory;
-                    }, 100);
+                        const subcategorySelect = document.getElementById('renameSubcategory');
+                        subcategorySelect.value = currentSubcategory;
+
+                        // Debug: verificar se a subcategoria foi selecionada
+                        console.log('Subcategoria atual:', currentSubcategory);
+                        console.log('Valor selecionado:', subcategorySelect.value);
+                        console.log('Grupo visível:', document.getElementById('renameSubcategoryGroup').style.display);
+                    }, 200); // Aumentei para 200ms
                 }
 
                 document.getElementById('renameProductName').focus();
                 document.getElementById('renameProductName').select();
-            }, 100);
+            }, 150); // Aumentei para 150ms
 
             document.getElementById('renameModal').classList.add('active');
         }
