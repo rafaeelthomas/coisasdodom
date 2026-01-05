@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Catálogo de Enxoval - Pertences do Dominic">
     <title>Catálogo de Enxoval - Pertences do Dominic</title>
+
+    <!-- Cropper.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
+
     <style>
         /* === Reset e Base === */
         * {
@@ -1092,12 +1096,12 @@
                         <ul class="subcategory-list">
                             <li class="subcategory-item">
                                 <a href="#Body/0-3%20meses/Com%20Manga" class="subcategory-link" onclick="showSection('Body/0-3%20meses/Com%20Manga', event)">
-                                    0-3 meses/Com Manga (14)
+                                    0-3 meses/Com Manga (15)
                                 </a>
                             </li>
                             <li class="subcategory-item">
                                 <a href="#Body/0-3%20meses/Sem%20Manga" class="subcategory-link" onclick="showSection('Body/0-3%20meses/Sem%20Manga', event)">
-                                    0-3 meses/Sem Manga (14)
+                                    0-3 meses/Sem Manga (13)
                                 </a>
                             </li>
                             <li class="subcategory-item">
@@ -1458,7 +1462,7 @@
                     <div class="section-header">
                         <div class="section-header-info">
                             <h3 style="font-size: 1.3rem; color: #2c3e50; margin-bottom: 10px;">0-3 meses/Com Manga</h3>
-                            <span class="item-count">14 itens</span>
+                            <span class="item-count">15 itens</span>
                         </div>
                         <button class="add-product-btn" onclick="openProductModal('Body/0-3 meses/Com Manga')">
                             ➕ Adicionar Produto
@@ -1505,6 +1509,20 @@
                             </div>
                             <div class="image-info">
                                 <div class="image-name" title="3">3</div>
+                            </div>
+                        </div>
+                        <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/4-1.jpg', '4-1')">
+                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Com%20Manga/4-1.jpg', '4-1', event)" title="Renomear produto">
+                                ✏️
+                            </button>
+                            <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Com%20Manga/4-1.jpg', '4-1', event)" title="Deletar produto">
+                                ✕
+                            </button>
+                            <div class="image-wrapper">
+                                <img src=".thumbnails/Body/0-3%20meses/Com%20Manga/4-1.jpg" alt="4-1" loading="lazy">
+                            </div>
+                            <div class="image-info">
+                                <div class="image-name" title="4-1">4-1</div>
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/4.jpg', '4')">
@@ -1667,7 +1685,7 @@
                     <div class="section-header">
                         <div class="section-header-info">
                             <h3 style="font-size: 1.3rem; color: #2c3e50; margin-bottom: 10px;">0-3 meses/Sem Manga</h3>
-                            <span class="item-count">14 itens</span>
+                            <span class="item-count">13 itens</span>
                         </div>
                         <button class="add-product-btn" onclick="openProductModal('Body/0-3 meses/Sem Manga')">
                             ➕ Adicionar Produto
@@ -1714,20 +1732,6 @@
                             </div>
                             <div class="image-info">
                                 <div class="image-name" title="3">3</div>
-                            </div>
-                        </div>
-                        <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/4.jpg', '4')">
-                            <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Sem%20Manga/4.jpg', '4', event)" title="Renomear produto">
-                                ✏️
-                            </button>
-                            <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Sem%20Manga/4.jpg', '4', event)" title="Deletar produto">
-                                ✕
-                            </button>
-                            <div class="image-wrapper">
-                                <img src=".thumbnails/Body/0-3%20meses/Sem%20Manga/4.jpg" alt="4" loading="lazy">
-                            </div>
-                            <div class="image-info">
-                                <div class="image-name" title="4">4</div>
                             </div>
                         </div>
                         <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/5.jpg', '5')">
@@ -2097,7 +2101,7 @@
                 <div class="section-header">
                     <div class="section-header-info">
                         <h2>Body / 0-3 meses/Com Manga</h2>
-                        <span class="item-count">14 itens</span>
+                        <span class="item-count">15 itens</span>
                     </div>
                     <button class="add-product-btn" onclick="openProductModal('Body/0-3 meses/Com Manga')">
                         ➕ Adicionar Produto
@@ -2144,6 +2148,20 @@
                         </div>
                         <div class="image-info">
                             <div class="image-name" title="3">3</div>
+                        </div>
+                    </div>
+                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/4-1.jpg', '4-1')">
+                        <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Com%20Manga/4-1.jpg', '4-1', event)" title="Renomear produto">
+                            ✏️
+                        </button>
+                        <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Com%20Manga/4-1.jpg', '4-1', event)" title="Deletar produto">
+                            ✕
+                        </button>
+                        <div class="image-wrapper">
+                            <img src=".thumbnails/Body/0-3%20meses/Com%20Manga/4-1.jpg" alt="4-1" loading="lazy">
+                        </div>
+                        <div class="image-info">
+                            <div class="image-name" title="4-1">4-1</div>
                         </div>
                     </div>
                     <div class="image-card" onclick="openModal('Body/0-3%20meses/Com%20Manga/4.jpg', '4')">
@@ -2306,7 +2324,7 @@
                 <div class="section-header">
                     <div class="section-header-info">
                         <h2>Body / 0-3 meses/Sem Manga</h2>
-                        <span class="item-count">14 itens</span>
+                        <span class="item-count">13 itens</span>
                     </div>
                     <button class="add-product-btn" onclick="openProductModal('Body/0-3 meses/Sem Manga')">
                         ➕ Adicionar Produto
@@ -2353,20 +2371,6 @@
                         </div>
                         <div class="image-info">
                             <div class="image-name" title="3">3</div>
-                        </div>
-                    </div>
-                    <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/4.jpg', '4')">
-                        <button class="edit-btn" onclick="openRenameModal('Body/0-3%20meses/Sem%20Manga/4.jpg', '4', event)" title="Renomear produto">
-                            ✏️
-                        </button>
-                        <button class="delete-btn" onclick="openDeleteModal('Body/0-3%20meses/Sem%20Manga/4.jpg', '4', event)" title="Deletar produto">
-                            ✕
-                        </button>
-                        <div class="image-wrapper">
-                            <img src=".thumbnails/Body/0-3%20meses/Sem%20Manga/4.jpg" alt="4" loading="lazy">
-                        </div>
-                        <div class="image-info">
-                            <div class="image-name" title="4">4</div>
                         </div>
                     </div>
                     <div class="image-card" onclick="openModal('Body/0-3%20meses/Sem%20Manga/5.jpg', '5')">
@@ -5190,7 +5194,10 @@
                         <option value="">Selecione uma subcategoria</option>
                     </select>
                 </div>
-                <div class="form-actions">
+                <div class="form-actions" style="gap: 10px;">
+                    <button type="button" class="btn" style="background: #9b59b6; color: white; flex: 1;" onclick="openImageEditor()">
+                        ✂️ Editar Imagem
+                    </button>
                     <button type="button" class="btn btn-cancel" onclick="closeRenameModal()">Cancelar</button>
                     <button type="submit" class="btn" style="background: #3498db; color: white;">
                         💾 Salvar Alterações
@@ -5456,7 +5463,8 @@
                 'ADICIONAR_PRODUTO': '📦 Adicionar Produto',
                 'RENOMEAR_PRODUTO': '✏️ Renomear Produto',
                 'MOVER_PRODUTO': '📁 Mover Produto',
-                'DELETAR_PRODUTO': '🗑️ Deletar Produto'
+                'DELETAR_PRODUTO': '🗑️ Deletar Produto',
+                'EDITAR_IMAGEM': '✂️ Editar Imagem'
             };
             return actions[action] || action;
         }
@@ -5470,7 +5478,8 @@
                 'ADICIONAR_PRODUTO': '#2ecc71',
                 'RENOMEAR_PRODUTO': '#f39c12',
                 'MOVER_PRODUTO': '#9b59b6',
-                'DELETAR_PRODUTO': '#e74c3c'
+                'DELETAR_PRODUTO': '#e74c3c',
+                'EDITAR_IMAGEM': '#1abc9c'
             };
             return colors[action] || '#7f8c8d';
         }
@@ -5501,6 +5510,153 @@
                 text += `${label}: <strong>${value}</strong><br>`;
             }
             return text || '-';
+        }
+
+        // === EDITOR DE IMAGENS ===
+        let imageCropper = null;
+        let currentImagePath = '';
+        let currentImageName = '';
+
+        // Abrir editor de imagem
+        function openImageEditor() {
+            if (!imageToRename) {
+                alert('❌ Erro: Nenhuma imagem selecionada');
+                return;
+            }
+
+            currentImagePath = imageToRename;
+            currentImageName = imageNameToRename;
+
+            const imageUrl = `/${currentImagePath}?t=${Date.now()}`;
+            const imageElement = document.getElementById('imageToEdit');
+            imageElement.src = imageUrl;
+
+            // Fechar modal de rename e abrir editor
+            closeRenameModal();
+            document.getElementById('imageEditorModal').classList.add('active');
+
+            // Inicializar Cropper quando a imagem carregar
+            imageElement.onload = function() {
+                if (imageCropper) {
+                    imageCropper.destroy();
+                }
+
+                imageCropper = new Cropper(imageElement, {
+                    viewMode: 1,
+                    dragMode: 'move',
+                    aspectRatio: NaN, // Livre
+                    autoCropArea: 1,
+                    restore: false,
+                    guides: true,
+                    center: true,
+                    highlight: false,
+                    cropBoxMovable: true,
+                    cropBoxResizable: true,
+                    toggleDragModeOnDblclick: false,
+                });
+            };
+        }
+
+        // Fechar editor de imagem
+        function closeImageEditorModal() {
+            document.getElementById('imageEditorModal').classList.remove('active');
+            if (imageCropper) {
+                imageCropper.destroy();
+                imageCropper = null;
+            }
+            document.getElementById('cropInfo').style.display = 'none';
+        }
+
+        // Girar imagem
+        function rotateImage(degrees) {
+            if (imageCropper) {
+                imageCropper.rotate(degrees);
+            }
+        }
+
+        // Inverter imagem
+        function flipImage(direction) {
+            if (!imageCropper) return;
+
+            if (direction === 'horizontal') {
+                const scaleX = imageCropper.getData().scaleX || 1;
+                imageCropper.scaleX(-scaleX);
+            } else if (direction === 'vertical') {
+                const scaleY = imageCropper.getData().scaleY || 1;
+                imageCropper.scaleY(-scaleY);
+            }
+        }
+
+        // Habilitar modo cortar
+        function enableCrop() {
+            if (imageCropper) {
+                imageCropper.setDragMode('crop');
+                document.getElementById('cropInfo').style.display = 'inline';
+                setTimeout(() => {
+                    document.getElementById('cropInfo').style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // Resetar editor
+        function resetImageEditor() {
+            if (imageCropper) {
+                imageCropper.reset();
+                imageCropper.setDragMode('move');
+                document.getElementById('cropInfo').style.display = 'none';
+            }
+        }
+
+        // Salvar imagem editada
+        async function saveEditedImage() {
+            if (!imageCropper) {
+                alert('❌ Erro ao salvar imagem');
+                return;
+            }
+
+            try {
+                // Obter canvas com as edições
+                const canvas = imageCropper.getCroppedCanvas({
+                    maxWidth: 4096,
+                    maxHeight: 4096,
+                    fillColor: '#fff',
+                    imageSmoothingEnabled: true,
+                    imageSmoothingQuality: 'high'
+                });
+
+                // Converter para blob
+                canvas.toBlob(async (blob) => {
+                    if (!blob) {
+                        alert('❌ Erro ao processar imagem');
+                        return;
+                    }
+
+                    // Criar FormData
+                    const formData = new FormData();
+                    formData.append('image', blob, currentImageName);
+                    formData.append('imagePath', currentImagePath);
+
+                    // Enviar para servidor
+                    const response = await fetch('/api/update-image', {
+                        method: 'POST',
+                        credentials: 'include',
+                        body: formData
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        alert('✅ ' + data.message);
+                        closeImageEditorModal();
+                        window.location.reload();
+                    } else {
+                        alert('❌ ' + data.error);
+                    }
+                }, 'image/jpeg', 0.92);
+            } catch (error) {
+                console.error('Erro ao salvar imagem:', error);
+                alert('❌ Erro ao salvar imagem. Tente novamente.');
+            }
         }
 
         // Toggle Sidebar Mobile
@@ -6221,5 +6377,58 @@
             }
         });
     </script>
+
+    
+    <!-- Modal de Edição de Imagem -->
+    <div class="modal" id="imageEditorModal" onclick="closeImageEditorModal()">
+        <div class="modal-form" onclick="event.stopPropagation()" style="max-width: 90vw; max-height: 90vh; overflow: hidden;">
+            <h2 style="color: #3498db;">✂️ Editar Imagem</h2>
+
+            <div style="padding: 20px 0;">
+                <!-- Container da imagem -->
+                <div id="imageEditorContainer" style="max-height: 50vh; overflow: hidden; background: #f5f5f5; border-radius: 8px; margin-bottom: 20px;">
+                    <img id="imageToEdit" src="" style="max-width: 100%; display: block;">
+                </div>
+
+                <!-- Controles de edição -->
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 15px;">
+                    <button type="button" class="btn" style="background: #3498db; color: white;" onclick="rotateImage(-90)" title="Girar 90° anti-horário">
+                        ↶ Girar Esquerda
+                    </button>
+                    <button type="button" class="btn" style="background: #3498db; color: white;" onclick="rotateImage(90)" title="Girar 90° horário">
+                        ↷ Girar Direita
+                    </button>
+                    <button type="button" class="btn" style="background: #9b59b6; color: white;" onclick="flipImage('horizontal')" title="Inverter horizontalmente">
+                        ⇄ Inverter H
+                    </button>
+                    <button type="button" class="btn" style="background: #9b59b6; color: white;" onclick="flipImage('vertical')" title="Inverter verticalmente">
+                        ⇅ Inverter V
+                    </button>
+                    <button type="button" class="btn" style="background: #27ae60; color: white;" onclick="enableCrop()" title="Habilitar modo cortar">
+                        ✂️ Cortar
+                    </button>
+                    <button type="button" class="btn" style="background: #f39c12; color: white;" onclick="resetImageEditor()" title="Resetar todas as edições">
+                        ↺ Resetar
+                    </button>
+                </div>
+
+                <!-- Info sobre aspecto ratio -->
+                <div style="text-align: center; font-size: 0.85rem; color: #7f8c8d; margin-bottom: 15px;">
+                    <span id="cropInfo" style="display: none;">
+                        ✂️ Modo cortar ativado - Arraste para selecionar a área
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-cancel" onclick="closeImageEditorModal()">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="saveEditedImage()">💾 Salvar Alterações</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cropper.js Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+
 </body>
 </html>

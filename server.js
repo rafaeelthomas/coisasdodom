@@ -501,6 +501,64 @@ app.delete('/api/delete-product', requireAdmin, (req, res) => {
     }
 });
 
+// Rota para atualizar imagem editada
+app.post('/api/update-image', requireAdmin, upload.single('image'), async (req, res) => {
+    try {
+        const { imagePath } = req.body;
+
+        if (!imagePath || !req.file) {
+            return res.status(400).json({ error: 'Caminho da imagem e arquivo são obrigatórios' });
+        }
+
+        const oldPath = path.join(__dirname, imagePath);
+        const oldThumbnailPath = path.join(__dirname, '.thumbnails', imagePath);
+
+        // Verificar se o arquivo original existe
+        if (!fs.existsSync(oldPath)) {
+            return res.status(404).json({ error: 'Arquivo original não encontrado' });
+        }
+
+        // Salvar arquivo temporário com o nome correto
+        const directory = path.dirname(oldPath);
+        const filename = path.basename(oldPath);
+        const tempPath = req.file.path;
+        const finalPath = path.join(directory, filename);
+
+        // Substituir arquivo original
+        fs.copyFileSync(tempPath, finalPath);
+        fs.unlinkSync(tempPath);
+
+        console.log(`✅ Imagem atualizada: ${finalPath}`);
+
+        // Regenerar thumbnail
+        await generateThumbnail(finalPath);
+
+        // Registrar log
+        addAuditLog('EDITAR_IMAGEM', req.session.username || 'desconhecido', {
+            produto: filename,
+            caminho: imagePath
+        });
+
+        // Regenerar HTML automaticamente
+        exec(`cd "${__dirname}" && python3 generate_catalog.py`, (error, stdout, stderr) => {
+            if (error) {
+                console.error('❌ Erro ao regerar HTML:', error);
+            } else {
+                console.log('✅ HTML regenerado após edição de imagem');
+            }
+        });
+
+        res.json({
+            success: true,
+            message: 'Imagem atualizada com sucesso!',
+            needsReload: true
+        });
+    } catch (error) {
+        console.error('Erro ao atualizar imagem:', error);
+        res.status(500).json({ error: 'Erro ao atualizar imagem: ' + error.message });
+    }
+});
+
 // Rota para servir imagens com tratamento de encoding
 app.get('*.(jpg|jpeg|png|gif|webp)', (req, res, next) => {
     // Decodificar o caminho da URL
