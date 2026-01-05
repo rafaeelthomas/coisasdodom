@@ -437,13 +437,15 @@
             max-height: 90%;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            overflow: auto;
+            align-items: flex-start;
+            overflow: hidden;
         }
 
         .modal-content.zoomed {
             overflow: auto;
             cursor: move;
+            align-items: flex-start;
+            justify-content: flex-start;
         }
 
         .modal-image {
@@ -452,17 +454,20 @@
             object-fit: contain;
             border-radius: 8px;
             cursor: zoom-in;
-            transition: transform 0.2s ease;
+            transition: width 0.2s ease, height 0.2s ease;
             user-select: none;
             -webkit-user-select: none;
+            display: block;
         }
 
         .modal-image.zoomed {
             cursor: grab;
-            transform: scale(2.5);
             max-width: none;
             max-height: none;
-            position: relative;
+            width: auto !important;
+            height: auto !important;
+            min-width: 250%;
+            min-height: 250%;
         }
 
         .modal-image.zoomed.dragging {
@@ -5624,18 +5629,24 @@
             });
         }
 
-        // Habilitar modo transformar livre
+        // Habilitar modo transformar estilo Photoshop
         function enableTransform() {
             if (imageCropper) {
-                // No Cropper.js, o modo 'move' permite arrastar e redimensionar a imagem livremente
-                imageCropper.setDragMode('move');
-                alert('💡 Modo de Edição Livre\n\n' +
-                      '✨ VOCÊ JÁ PODE:\n' +
-                      '• 🖱️ ARRASTAR a imagem para reposicionar\n' +
-                      '• ⬆️⬇️ Usar botões Aumentar/Reduzir\n' +
-                      '• 🖱️ Roda do mouse para zoom fino\n' +
-                      '• ↶↷ Girar, ⇄⇅ Inverter, ✂️ Cortar\n\n' +
-                      '💡 Dica: Clique e arraste a imagem agora!');
+                // Modo crop com cropbox visível = handles nos cantos como Photoshop
+                imageCropper.setDragMode('crop');
+
+                // Resetar crop para cobrir toda a imagem
+                imageCropper.reset();
+                imageCropper.crop();
+
+                alert('🎨 Modo Transformar Livre (estilo Photoshop)\n\n' +
+                      '✨ AGORA VOCÊ PODE:\n' +
+                      '• 🔲 Arrastar os CANTOS para redimensionar\n' +
+                      '• 🔄 Arrastar FORA da caixa para girar\n' +
+                      '• 🖱️ Arrastar DENTRO da caixa para mover\n' +
+                      '• ↶↷ Usar botões Girar para rotação precisa\n' +
+                      '• ⬆️⬇️ Botões Aumentar/Reduzir para escala\n\n' +
+                      '💡 Exatamente como no Photoshop!');
             }
         }
 
