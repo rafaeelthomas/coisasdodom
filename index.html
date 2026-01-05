@@ -5553,6 +5553,10 @@
                     cropBoxMovable: true,
                     cropBoxResizable: true,
                     toggleDragModeOnDblclick: false,
+                    wheelZoomRatio: 0.1, // Habilitar zoom com roda do mouse
+                    scalable: true,
+                    zoomable: true,
+                    zoomOnWheel: true,
                 });
             };
         }
@@ -5598,10 +5602,33 @@
             }
         }
 
-        // Zoom da imagem
-        function zoomImage(ratio) {
+        // Escalar/transformar tamanho da imagem (como Photoshop)
+        function scaleImage(delta) {
+            if (!imageCropper) return;
+
+            const containerData = imageCropper.getContainerData();
+            const canvasData = imageCropper.getCanvasData();
+
+            // Calcular nova largura e altura
+            const newWidth = canvasData.width * (1 + delta);
+            const newHeight = canvasData.height * (1 + delta);
+
+            // Aplicar novo tamanho
+            imageCropper.setCanvasData({
+                width: newWidth,
+                height: newHeight
+            });
+        }
+
+        // Habilitar modo transformar livre
+        function enableTransform() {
             if (imageCropper) {
-                imageCropper.zoom(ratio);
+                // No Cropper.js, o modo 'move' permite arrastar e redimensionar a imagem livremente
+                imageCropper.setDragMode('move');
+                alert('💡 Modo transformar ativado!\n\n' +
+                      '• Use os botões ⬆️ Aumentar e ⬇️ Reduzir para escalar\n' +
+                      '• Arraste a imagem para reposicionar\n' +
+                      '• Use a roda do mouse para zoom');
             }
         }
 
@@ -6440,11 +6467,14 @@
                     <button type="button" class="btn" style="background: #27ae60; color: white;" onclick="enableCrop()" title="Habilitar modo cortar">
                         ✂️ Cortar
                     </button>
-                    <button type="button" class="btn" style="background: #e67e22; color: white;" onclick="zoomImage(0.1)" title="Aumentar zoom">
-                        🔍+ Zoom In
+                    <button type="button" class="btn" style="background: #e67e22; color: white;" onclick="scaleImage(0.1)" title="Aumentar tamanho da imagem">
+                        ⬆️ Aumentar
                     </button>
-                    <button type="button" class="btn" style="background: #e67e22; color: white;" onclick="zoomImage(-0.1)" title="Reduzir zoom">
-                        🔍- Zoom Out
+                    <button type="button" class="btn" style="background: #e67e22; color: white;" onclick="scaleImage(-0.1)" title="Reduzir tamanho da imagem">
+                        ⬇️ Reduzir
+                    </button>
+                    <button type="button" class="btn" style="background: #16a085; color: white;" onclick="enableTransform()" title="Modo transformar livre">
+                        🔄 Transformar
                     </button>
                     <button type="button" class="btn" style="background: #f39c12; color: white;" onclick="resetImageEditor()" title="Resetar todas as edições">
                         ↺ Resetar
