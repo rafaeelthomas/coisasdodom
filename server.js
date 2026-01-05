@@ -18,7 +18,7 @@ const ADMIN_USERS = process.env.ADMIN_USERS
       })
     : [
         { username: 'admin', password: 'admin123' },
-        { username: 'rafael', password: 'rafael123' }
+        { username: 'rafael', password: 'r#7Dominic' }
       ];
 
 // Sistema de Logs de Auditoria
