@@ -126,6 +126,22 @@ const upload = multer({
     }
 });
 
+// Configuração de upload para imagens editadas (usa pasta temporária)
+const uploadTemp = multer({
+    dest: path.join(__dirname, 'uploads'), // Pasta temporária
+    limits: {
+        fileSize: 10 * 1024 * 1024 // 10MB para imagens editadas
+    },
+    fileFilter: function (req, file, cb) {
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+        if (allowedTypes.includes(file.mimetype)) {
+            cb(null, true);
+        } else {
+            cb(new Error('Tipo de arquivo inválido. Use JPG, PNG, GIF ou WEBP.'));
+        }
+    }
+});
+
 // Middleware para verificar se usuário está autenticado
 function requireAdmin(req, res, next) {
     if (req.session && req.session.isAdmin) {
@@ -502,16 +518,26 @@ app.delete('/api/delete-product', requireAdmin, (req, res) => {
 });
 
 // Rota para atualizar imagem editada
-app.post('/api/update-image', requireAdmin, upload.single('image'), async (req, res) => {
+app.post('/api/update-image', requireAdmin, uploadTemp.single('image'), async (req, res) => {
+    console.log('🔧 POST /api/update-image chamado');
+    console.log('req.body:', req.body);
+    console.log('req.file:', req.file);
     try {
-        const { imagePath } = req.body;
+        let { imagePath } = req.body;
 
         if (!imagePath || !req.file) {
             return res.status(400).json({ error: 'Caminho da imagem e arquivo são obrigatórios' });
         }
 
+        // Decodificar URL encoding (ex: %20 -> espaço)
+        imagePath = decodeURIComponent(imagePath);
+        console.log('imagePath decodificado:', imagePath);
+
         const oldPath = path.join(__dirname, imagePath);
         const oldThumbnailPath = path.join(__dirname, '.thumbnails', imagePath);
+
+        console.log('oldPath:', oldPath);
+        console.log('Arquivo existe?', fs.existsSync(oldPath));
 
         // Verificar se o arquivo original existe
         if (!fs.existsSync(oldPath)) {

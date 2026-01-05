@@ -5598,6 +5598,13 @@
             }
         }
 
+        // Zoom da imagem
+        function zoomImage(ratio) {
+            if (imageCropper) {
+                imageCropper.zoom(ratio);
+            }
+        }
+
         // Resetar editor
         function resetImageEditor() {
             if (imageCropper) {
@@ -5609,12 +5616,23 @@
 
         // Salvar imagem editada
         async function saveEditedImage() {
+            console.log('saveEditedImage chamada');
+            console.log('imageCropper:', imageCropper);
+            console.log('currentImagePath:', currentImagePath);
+            console.log('currentImageName:', currentImageName);
+
             if (!imageCropper) {
-                alert('❌ Erro ao salvar imagem');
+                alert('❌ Erro: Editor de imagem não inicializado');
+                return;
+            }
+
+            if (!currentImagePath || !currentImageName) {
+                alert('❌ Erro: Informações da imagem não disponíveis');
                 return;
             }
 
             try {
+                console.log('Obtendo canvas...');
                 // Obter canvas com as edições
                 const canvas = imageCropper.getCroppedCanvas({
                     maxWidth: 4096,
@@ -5624,38 +5642,53 @@
                     imageSmoothingQuality: 'high'
                 });
 
+                if (!canvas) {
+                    alert('❌ Erro: Não foi possível gerar o canvas');
+                    return;
+                }
+
+                console.log('Canvas obtido, convertendo para blob...');
                 // Converter para blob
                 canvas.toBlob(async (blob) => {
-                    if (!blob) {
-                        alert('❌ Erro ao processar imagem');
-                        return;
-                    }
+                    try {
+                        console.log('Blob criado:', blob);
+                        if (!blob) {
+                            alert('❌ Erro ao processar imagem');
+                            return;
+                        }
 
-                    // Criar FormData
-                    const formData = new FormData();
-                    formData.append('image', blob, currentImageName);
-                    formData.append('imagePath', currentImagePath);
+                        // Criar FormData
+                        const formData = new FormData();
+                        formData.append('image', blob, currentImageName);
+                        formData.append('imagePath', currentImagePath);
 
-                    // Enviar para servidor
-                    const response = await fetch('/api/update-image', {
-                        method: 'POST',
-                        credentials: 'include',
-                        body: formData
-                    });
+                        console.log('Enviando para servidor...');
+                        // Enviar para servidor
+                        const response = await fetch('/api/update-image', {
+                            method: 'POST',
+                            credentials: 'include',
+                            body: formData
+                        });
 
-                    const data = await response.json();
+                        console.log('Resposta recebida:', response.status);
+                        const data = await response.json();
+                        console.log('Dados:', data);
 
-                    if (response.ok) {
-                        alert('✅ ' + data.message);
-                        closeImageEditorModal();
-                        window.location.reload();
-                    } else {
-                        alert('❌ ' + data.error);
+                        if (response.ok) {
+                            alert('✅ ' + data.message);
+                            closeImageEditorModal();
+                            window.location.reload();
+                        } else {
+                            alert('❌ ' + data.error);
+                        }
+                    } catch (innerError) {
+                        console.error('Erro no callback do blob:', innerError);
+                        alert('❌ Erro ao processar: ' + innerError.message);
                     }
                 }, 'image/jpeg', 0.92);
             } catch (error) {
                 console.error('Erro ao salvar imagem:', error);
-                alert('❌ Erro ao salvar imagem. Tente novamente.');
+                alert('❌ Erro ao salvar imagem: ' + error.message);
             }
         }
 
@@ -6406,6 +6439,12 @@
                     </button>
                     <button type="button" class="btn" style="background: #27ae60; color: white;" onclick="enableCrop()" title="Habilitar modo cortar">
                         ✂️ Cortar
+                    </button>
+                    <button type="button" class="btn" style="background: #e67e22; color: white;" onclick="zoomImage(0.1)" title="Aumentar zoom">
+                        🔍+ Zoom In
+                    </button>
+                    <button type="button" class="btn" style="background: #e67e22; color: white;" onclick="zoomImage(-0.1)" title="Reduzir zoom">
+                        🔍- Zoom Out
                     </button>
                     <button type="button" class="btn" style="background: #f39c12; color: white;" onclick="resetImageEditor()" title="Resetar todas as edições">
                         ↺ Resetar
