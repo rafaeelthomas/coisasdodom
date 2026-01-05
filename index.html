@@ -466,8 +466,7 @@
             max-height: none;
             width: auto !important;
             height: auto !important;
-            min-width: 250%;
-            min-height: 250%;
+            /* Tamanho definido via JavaScript usando naturalWidth/naturalHeight */
         }
 
         .modal-image.zoomed.dragging {
@@ -5831,10 +5830,26 @@
                 modalContent.classList.toggle('zoomed');
 
                 if (!wasZoomed) {
-                    // Ativou o zoom - adicionar eventos de pan
+                    // Ativou o zoom - definir tamanho REAL da imagem (6x para zoom máximo)
+                    const naturalWidth = modalImage.naturalWidth;
+                    const naturalHeight = modalImage.naturalHeight;
+
+                    // Aplicar tamanho 6x maior que o original
+                    modalImage.style.width = (naturalWidth * 6) + 'px';
+                    modalImage.style.height = (naturalHeight * 6) + 'px';
+
+                    console.log('Zoom ativado:');
+                    console.log('- Tamanho original:', naturalWidth, 'x', naturalHeight);
+                    console.log('- Tamanho com zoom:', modalImage.style.width, 'x', modalImage.style.height);
+
+                    // Adicionar eventos de pan
                     setupPanEvents(modalContent, modalImage);
                 } else {
-                    // Desativou o zoom - remover eventos de pan
+                    // Desativou o zoom - resetar tamanho
+                    modalImage.style.width = '';
+                    modalImage.style.height = '';
+
+                    // Remover eventos de pan
                     removePanEvents(modalContent, modalImage);
                 }
             };
