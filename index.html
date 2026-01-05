@@ -5629,10 +5629,13 @@
             if (imageCropper) {
                 // No Cropper.js, o modo 'move' permite arrastar e redimensionar a imagem livremente
                 imageCropper.setDragMode('move');
-                alert('💡 Modo transformar ativado!\n\n' +
-                      '• Use os botões ⬆️ Aumentar e ⬇️ Reduzir para escalar\n' +
-                      '• Arraste a imagem para reposicionar\n' +
-                      '• Use a roda do mouse para zoom');
+                alert('💡 Modo de Edição Livre\n\n' +
+                      '✨ VOCÊ JÁ PODE:\n' +
+                      '• 🖱️ ARRASTAR a imagem para reposicionar\n' +
+                      '• ⬆️⬇️ Usar botões Aumentar/Reduzir\n' +
+                      '• 🖱️ Roda do mouse para zoom fino\n' +
+                      '• ↶↷ Girar, ⇄⇅ Inverter, ✂️ Cortar\n\n' +
+                      '💡 Dica: Clique e arraste a imagem agora!');
             }
         }
 
@@ -5832,8 +5835,9 @@
                 e.preventDefault();
                 isDragging = true;
                 image.classList.add('dragging');
-                startX = e.pageX - container.offsetLeft;
-                startY = e.pageY - container.offsetTop;
+                // Usar clientX/Y para coordenadas relativas à viewport
+                startX = e.clientX;
+                startY = e.clientY;
                 scrollLeft = container.scrollLeft;
                 scrollTop = container.scrollTop;
             };
@@ -5842,12 +5846,12 @@
             container.onmousemove = function(e) {
                 if (!isDragging) return;
                 e.preventDefault();
-                const x = e.pageX - container.offsetLeft;
-                const y = e.pageY - container.offsetTop;
-                const walkX = (x - startX) * 2;
-                const walkY = (y - startY) * 2;
-                container.scrollLeft = scrollLeft - walkX;
-                container.scrollTop = scrollTop - walkY;
+                // Calcular deslocamento desde o início do drag
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+                // Aplicar deslocamento ao scroll (multiplicador aumenta sensibilidade)
+                container.scrollLeft = scrollLeft - deltaX;
+                container.scrollTop = scrollTop - deltaY;
             };
 
             // Mouse up - parar arraste
@@ -5874,8 +5878,8 @@
             image.ontouchstart = function(e) {
                 const touch = e.touches[0];
                 isDragging = true;
-                startX = touch.pageX - container.offsetLeft;
-                startY = touch.pageY - container.offsetTop;
+                startX = touch.clientX;
+                startY = touch.clientY;
                 scrollLeft = container.scrollLeft;
                 scrollTop = container.scrollTop;
             };
@@ -5884,12 +5888,10 @@
                 if (!isDragging) return;
                 e.preventDefault();
                 const touch = e.touches[0];
-                const x = touch.pageX - container.offsetLeft;
-                const y = touch.pageY - container.offsetTop;
-                const walkX = (x - startX) * 2;
-                const walkY = (y - startY) * 2;
-                container.scrollLeft = scrollLeft - walkX;
-                container.scrollTop = scrollTop - walkY;
+                const deltaX = touch.clientX - startX;
+                const deltaY = touch.clientY - startY;
+                container.scrollLeft = scrollLeft - deltaX;
+                container.scrollTop = scrollTop - deltaY;
             };
 
             container.ontouchend = function() {
